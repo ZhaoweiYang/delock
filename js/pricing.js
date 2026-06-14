@@ -4,34 +4,34 @@
   const $ = (id) => document.getElementById(id);
 
   const PLANS = {
-    free:    { name: 'Free',    monthly: 0,    annual: 0 },
+    basic:   { name: 'Basic',   monthly: 1,    annual: 9.6 },
     premium: { name: 'Premium', monthly: 19.9, annual: 191 }
   };
 
   let plan = 'premium';
   let cycle = 'monthly';
   const money = (n) => '$' + n.toFixed(2);
+  const priceOf = (id) => cycle === 'annual' ? PLANS[id].annual : PLANS[id].monthly;
 
   /* ------------------------------ Render ----------------------------- */
   function render() {
-    const p = PLANS[plan];
-    const price = cycle === 'annual' ? p.annual : p.monthly;
-    const isFree = plan === 'free';
+    const price = priceOf(plan);
 
     document.querySelectorAll('.plan').forEach((el) =>
       el.classList.toggle('selected', el.dataset.plan === plan));
 
-    $('pricePremium').textContent = cycle === 'annual' ? money(PLANS.premium.annual) : money(PLANS.premium.monthly);
+    // card prices reflect the billing cycle
+    $('priceBasic').textContent = money(priceOf('basic'));
+    $('basicPer').textContent = cycle === 'annual' ? '/yr' : '/mo';
+    $('pricePremium').textContent = money(priceOf('premium'));
     $('premiumPer').textContent = cycle === 'annual' ? '/yr' : '/mo';
 
-    $('sumPlan').textContent = p.name;
+    $('sumPlan').textContent = PLANS[plan].name;
     $('sumCycle').textContent = cycle === 'annual' ? 'Annual' : 'Monthly';
     $('sumSubtotal').textContent = money(price);
     $('sumTotal').textContent = money(price);
 
-    if (isFree) {
-      $('sumNote').textContent = 'Cancel anytime.';
-    } else if (cycle === 'annual') {
+    if (cycle === 'annual') {
       $('sumNote').textContent = `Billed ${money(price)} yearly (≈ ${money(price / 12)}/mo). Cancel anytime.`;
     } else {
       $('sumNote').textContent = `Renews monthly at ${money(price)}. Cancel anytime.`;
@@ -52,13 +52,8 @@
   function onContinue() {
     $('payBtn').hidden = true;
     $('paySuccess').hidden = false;
-    if (plan === 'free') {
-      $('successTitle').textContent = 'Account created';
-      $('successText').textContent = 'Your free Delock account is ready.';
-    } else {
-      $('successTitle').textContent = "You're all set";
-      $('successText').textContent = `Welcome to Delock ${PLANS[plan].name} (${cycle === 'annual' ? 'annual' : 'monthly'}).`;
-    }
+    $('successTitle').textContent = "You're all set";
+    $('successText').textContent = `Welcome to Delock ${PLANS[plan].name} (${cycle === 'annual' ? 'annual' : 'monthly'}).`;
     $('paySuccess').scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
 
