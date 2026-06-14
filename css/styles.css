@@ -714,6 +714,7 @@ section { scroll-margin-top: 96px; }
 
 /* ---------------------------- Responsive ---------------------------- */
 @media (max-width: 960px) {
+  .container { padding: 0 20px; }
   .hero-grid, .split, .split.reverse .split-media { grid-template-columns: 1fr; }
   .split.reverse .split-media { order: 0; }
   .feature-grid, .steps, .pricing-grid, .quote-grid { grid-template-columns: 1fr; }
@@ -723,16 +724,36 @@ section { scroll-margin-top: 96px; }
   .nav-toggle { display: grid; place-items: center; }
   .nav.open .nav-links {
     display: flex; flex-direction: column; align-items: stretch;
-    position: absolute; top: 72px; left: 24px; right: 24px;
+    position: absolute; top: calc(100% + 6px); left: 0; right: 0;
     background: #15121f; border: 1px solid var(--line-2);
     padding: 12px; gap: 4px; border-radius: 16px; box-shadow: var(--shadow-md);
   }
-  .nav.open .nav-links a { padding: 12px 14px; }
+  .nav.open .nav-links a { padding: 13px 14px; font-size: 16px; }
+  .section { padding: 68px 0; }
+  .section-head { margin-bottom: 40px; }
+  .split + .split { margin-top: 64px; }
   .alert-card { position: static; width: auto; margin: 18px 0 0; }
 }
 @media (max-width: 560px) {
-  .stats { grid-template-columns: 1fr 1fr; }
-  .footer-top { grid-template-columns: 1fr 1fr; }
-  .cta { padding: 48px 24px; }
-  .hero { padding: 48px 0 44px; }
+  .container { padding: 0 16px; }
+  .nav { padding: 10px 14px 0; }
+  .nav-inner { height: 58px; padding: 0 8px 0 16px; gap: 14px; }
+  .brand { font-size: 19px; }
+  .nav-actions .btn { padding: 10px 14px; font-size: 14px; }
+  .hero { padding: 34px 0 40px; }
+  .hero h1 { font-size: clamp(30px, 8vw, 44px); }
+  .hero .lead { font-size: 17px; }
+  .hero-cta { gap: 10px; }
+  .hero-cta .btn, .cta-actions .btn { flex: 1 1 100%; }
+  .badge-pill { font-size: 12.5px; }
+  .stats { grid-template-columns: 1fr 1fr; gap: 16px; }
+  .footer-top { grid-template-columns: 1fr 1fr; gap: 26px; }
+  .cta { padding: 44px 22px; }
+  .section { padding: 56px 0; }
+  .quote-grid, .feature-grid, .steps { gap: 16px; }
+}
+@media (max-width: 380px) {
+  .nav-actions .btn { padding: 9px 12px; }
+  .brand .logo-mark { width: 30px; height: 30px; }
+  .stats { grid-template-columns: 1fr; }
 }
