@@ -99,7 +99,19 @@
 .plan-main { flex: 1; min-width: 0; display: grid; gap: 6px; }
 .plan-name { font-family: var(--font-display); font-weight: 700; font-size: 19px; color: #fff; }
 .plan-blurb { font-size: 14px; color: var(--muted); }
-.plan-feats { font-size: 13px; color: #b9b8cc; }
+.plan-details {
+  list-style: none; margin: 12px 0 2px; padding: 0;
+  display: none; gap: 9px;
+}
+.plan.selected .plan-details { display: grid; }
+.plan-details li {
+  display: flex; align-items: flex-start; gap: 9px;
+  font-size: 13.5px; color: #cdccdb; line-height: 1.4;
+}
+.plan-details li::before {
+  content: "✓"; flex: 0 0 auto;
+  color: var(--orange); font-weight: 700; font-size: 13px; line-height: 1.5;
+}
 .plan-price { text-align: right; flex: 0 0 auto; white-space: nowrap; }
 .plan-price b { display: block; font-family: var(--font-display); font-weight: 700; font-size: 24px; color: #fff; letter-spacing: -.02em; }
 .plan-price span { font-size: 12px; color: var(--muted); }
