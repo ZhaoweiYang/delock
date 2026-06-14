@@ -101,9 +101,11 @@
 .plan-blurb { font-size: 14px; color: var(--muted); }
 .plan-details {
   list-style: none; margin: 12px 0 2px; padding: 0;
-  display: none; gap: 9px;
+  display: grid; gap: 9px;
 }
-.plan.selected .plan-details { display: grid; }
+/* collapsed cards show just the first benefit (+ no blurb) */
+.plan:not(.selected) .plan-details li:not(:first-child) { display: none; }
+.plan:not(.selected) .plan-blurb { display: none; }
 .plan-details li {
   display: flex; align-items: flex-start; gap: 9px;
   font-size: 13.5px; color: #cdccdb; line-height: 1.4;
