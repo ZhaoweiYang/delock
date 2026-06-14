@@ -31,6 +31,10 @@
       <span class="ws-local-badge">
         <span class="dot"></span> Runs locally
       </span>
+      <button class="ws-hist-btn" id="histBtn" type="button">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M3 12a9 9 0 1 0 3-6.7L3 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 4v4h4M12 8v4l3 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        History
+      </button>
       <a href="index.html" class="btn btn-ghost ws-back">
         <svg viewBox="0 0 24 24" fill="none"><path d="M19 12H5M11 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         Back to site
@@ -174,11 +178,27 @@
       <svg viewBox="0 0 24 24" fill="none"><path d="M8 11V7.5A4 4 0 0 1 15.5 5.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><rect x="5" y="11" width="14" height="9" rx="2" stroke="currentColor" stroke-width="1.8"/></svg>
       <span>Decrypt</span>
     </button>
+    <button id="histTab" type="button">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M3 12a9 9 0 1 0 3-6.7L3 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 4v4h4M12 8v4l3 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>History</span>
+    </button>
     <button data-view="more" type="button">
       <svg viewBox="0 0 24 24" fill="none"><circle cx="5" cy="12" r="1.7" fill="currentColor"/><circle cx="12" cy="12" r="1.7" fill="currentColor"/><circle cx="19" cy="12" r="1.7" fill="currentColor"/></svg>
       <span>More</span>
     </button>
   </nav>
+
+  <!-- ===================== UNLOCK HISTORY ===================== -->
+  <div class="ws-history" id="historyPanel" hidden>
+    <div class="ws-history-head">
+      <button class="ws-history-close" id="histClose" type="button" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M19 12H5M11 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <h2>Unlock history</h2>
+      <button class="ws-history-clear" id="histClear" type="button">Clear</button>
+    </div>
+    <div class="ws-history-body" id="historyList"></div>
+  </div>
 
   <div class="ws-toast" id="toast"></div>
 

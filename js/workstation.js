@@ -376,9 +376,13 @@ Content-Type: application/json
       if (result instanceof Uint8Array) {
         if (inputTab === 'file') {
           offerDownload(result, (fileName || 'output').replace(/\.delock\.txt$/, '') || 'decrypted.bin');
-          showOutput(`Decrypted ${result.length} bytes — download ready.`, true);
+          const msg = `Decrypted ${result.length} bytes — download ready.`;
+          showOutput(msg, true);
+          if (mode === 'decrypt') recordUnlock({ type: 'Decrypt', algoId: current.id, algo: current.name, fmt: format, source: 'file', input: fileName || '(file)', output: msg });
         } else {
-          showOutput(dec.decode(result), true);
+          const text = dec.decode(result);
+          showOutput(text, true);
+          if (mode === 'decrypt') recordUnlock({ type: 'Decrypt', algoId: current.id, algo: current.name, fmt: format, source: 'text', input: $('inputText').value, output: text });
         }
         return;
       }
@@ -390,6 +394,10 @@ Content-Type: application/json
         offerDownloadBlob(blob, dlName);
       }
       showOutput(result, true);
+      if (mode === 'decrypt') {
+        const label = ['base64', 'hex', 'url'].includes(current.type) ? 'Decode' : 'Decrypt';
+        recordUnlock({ type: label, algoId: current.id, algo: current.name, fmt: format, source: inputTab === 'file' ? 'file' : 'text', input: inputTab === 'file' ? (fileName || '(file)') : $('inputText').value, output: result });
+      }
     } catch (e) {
       showOutput((mode === 'decrypt' ? 'Decryption failed — check your key, format and input. ' : '') + (e.message || e), false);
     } finally {
@@ -441,39 +449,99 @@ Content-Type: application/json
     toastTimer = setTimeout(() => el.classList.remove('show'), 1600);
   }
 
+  /* --------------------------- Input helpers ------------------------ */
+  function setInputTab(tab) {
+    inputTab = tab;
+    document.querySelectorAll('#inputTabs button').forEach((x) => x.classList.toggle('active', x.dataset.tab === tab));
+    $('paneText').hidden = tab !== 'text';
+    $('paneFile').hidden = tab !== 'file';
+    $('paneApi').hidden = tab !== 'api';
+  }
+  function setFormat(f) {
+    format = f;
+    document.querySelectorAll('#formatToggle button').forEach((x) => x.classList.toggle('active', x.dataset.fmt === f));
+    updateApiSnippet();
+  }
+
+  /* ----------------------- Unlock history --------------------------- */
+  const HKEY = 'delock.history';
+  let unlocks = [];
+  function loadHistory() { try { unlocks = JSON.parse(localStorage.getItem(HKEY) || '[]'); } catch (e) { unlocks = []; } }
+  function saveHistory() { try { localStorage.setItem(HKEY, JSON.stringify(unlocks.slice(0, 50))); } catch (e) { /* ignore quota */ } }
+  function recordUnlock(entry) {
+    entry.id = 'h' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+    entry.ts = Date.now();
+    unlocks.unshift(entry);
+    unlocks = unlocks.slice(0, 50);
+    saveHistory();
+  }
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  }
+  function renderHistory() {
+    const box = $('historyList');
+    if (!unlocks.length) {
+      box.innerHTML = '<div class="hist-empty">No unlocked content yet.<br>Decrypt or decode something and it will appear here.</div>';
+      return;
+    }
+    box.innerHTML = unlocks.map((e) => {
+      const t = new Date(e.ts).toLocaleString();
+      const preview = (e.source === 'text' ? e.output : e.input) || '';
+      const prev = escapeHtml(preview.length > 160 ? preview.slice(0, 160) + '…' : preview) || '(empty)';
+      const cls = e.type === 'Decode' ? 'decode' : 'decrypt';
+      return `<button class="hist-item" data-id="${e.id}">
+        <div class="hist-row"><span class="hist-badge ${cls}">${e.type}</span><span class="hist-algo">${escapeHtml(e.algo)}</span><span class="hist-time">${t}</span></div>
+        <div class="hist-preview">${prev}</div>
+      </button>`;
+    }).join('');
+    box.querySelectorAll('.hist-item').forEach((it) =>
+      it.addEventListener('click', () => restoreHistory(it.dataset.id)));
+  }
+  function openHistory() { renderHistory(); $('historyPanel').hidden = false; }
+  function closeHistory() { $('historyPanel').hidden = true; }
+  function clearHistory() { unlocks = []; saveHistory(); renderHistory(); }
+  function restoreHistory(id) {
+    const e = unlocks.find((x) => x.id === id);
+    if (!e) return;
+    closeHistory();
+    if (e.source !== 'text') { toast('File unlocks can’t be reopened'); return; }
+    selectAlgo(e.algoId);
+    setFormat(e.fmt || 'base64');
+    setInputTab('text');
+    $('inputText').value = e.input || '';
+    setView('decrypt');
+    showOutput(e.output || '', true);
+    toast('Loaded from history');
+  }
+
   /* ----------------------------- Wiring ----------------------------- */
   function init() {
     renderLists();
+    loadHistory();
 
     // mobile bottom tab bar
     gridEl = document.querySelector('.ws-grid');
     setView('encrypt');
-    document.querySelectorAll('#wsTabbar button').forEach((b) =>
+    document.querySelectorAll('#wsTabbar button[data-view]').forEach((b) =>
       b.addEventListener('click', () => { if (!b.classList.contains('disabled')) setView(b.dataset.view); }));
+
+    // history triggers (mobile tab + desktop button) and panel controls
+    $('histTab').addEventListener('click', openHistory);
+    $('histBtn').addEventListener('click', openHistory);
+    $('histClose').addEventListener('click', closeHistory);
+    $('histClear').addEventListener('click', clearHistory);
 
     $('modeEncrypt').addEventListener('click', () => setMode('encrypt'));
     $('modeDecrypt').addEventListener('click', () => { if (!$('modeDecrypt').disabled) setMode('decrypt'); });
 
     // input tabs
     document.querySelectorAll('#inputTabs button').forEach((b) => {
-      b.addEventListener('click', () => {
-        inputTab = b.dataset.tab;
-        document.querySelectorAll('#inputTabs button').forEach((x) => x.classList.toggle('active', x === b));
-        $('paneText').hidden = inputTab !== 'text';
-        $('paneFile').hidden = inputTab !== 'file';
-        $('paneApi').hidden = inputTab !== 'api';
-        clearOutput();
-      });
+      b.addEventListener('click', () => { setInputTab(b.dataset.tab); clearOutput(); });
     });
 
     // format toggle
     document.querySelectorAll('#formatToggle button').forEach((b) => {
-      b.addEventListener('click', () => {
-        format = b.dataset.fmt;
-        document.querySelectorAll('#formatToggle button').forEach((x) => x.classList.toggle('active', x === b));
-        updateApiSnippet();
-        clearOutput();
-      });
+      b.addEventListener('click', () => { setFormat(b.dataset.fmt); clearOutput(); });
     });
 
     // explain accordion
