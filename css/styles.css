@@ -39,8 +39,14 @@
   --font-body: "Inter", system-ui, -apple-system, sans-serif;
 }
 
-* { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
+/* Tactile press feedback on touch */
+.btn:active { transform: translateY(0) scale(.97); }
+
+/* App-style sticky CTA — mobile only (shown via media query) */
+.mobile-cta { display: none; }
 
 body {
   margin: 0;
@@ -734,9 +740,28 @@ section { scroll-margin-top: 96px; }
   .split + .split { margin-top: 64px; }
   .alert-card { position: static; width: auto; margin: 18px 0 0; }
 }
+/* App-style sticky CTA bar on phones */
+@media (max-width: 700px) {
+  .mobile-cta {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    position: fixed; left: 14px; right: 14px;
+    bottom: calc(14px + env(safe-area-inset-bottom));
+    z-index: 45;
+    padding: 16px; border-radius: 16px;
+    background: var(--grad); color: #fff;
+    font-family: var(--font-display); font-weight: 700; font-size: 16px;
+    box-shadow: 0 14px 34px rgba(255, 90, 31, .5);
+  }
+  .mobile-cta svg { width: 19px; height: 19px; }
+  .mobile-cta:active { transform: scale(.98); }
+  body { padding-bottom: 86px; }            /* clear the fixed CTA */
+  .nav-actions .btn { display: none; }       /* CTA lives in the bottom bar now */
+  .nav { padding-top: calc(12px + env(safe-area-inset-top)); }
+}
+
 @media (max-width: 560px) {
   .container { padding: 0 16px; }
-  .nav { padding: 10px 14px 0; }
+  .nav { padding: 10px 14px 0; padding-top: calc(10px + env(safe-area-inset-top)); }
   .nav-inner { height: 58px; padding: 0 8px 0 16px; gap: 14px; }
   .brand { font-size: 19px; }
   .nav-actions .btn { padding: 10px 14px; font-size: 14px; }

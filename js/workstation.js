@@ -62,6 +62,7 @@
   let inputTab = 'text';           // text | file | api
   let format = 'base64';           // base64 | hex
   let fileBytes = null, fileName = '';
+  let gridEl = null;               // .ws-grid (mobile app-view switching)
 
   /* ----------------------------- Helpers ---------------------------- */
   const $ = (id) => document.getElementById(id);
@@ -259,6 +260,15 @@
     updateExplain();
     updateApiSnippet();
     clearOutput();
+    if (window.innerWidth <= 760) setView('console');   // jump to console after picking
+  }
+
+  /* mobile bottom-tab view switching */
+  function setView(v) {
+    if (!gridEl) return;
+    gridEl.dataset.view = v;
+    document.querySelectorAll('#wsTabbar button').forEach((b) =>
+      b.classList.toggle('active', b.dataset.view === v));
   }
 
   function setMode(m) {
@@ -423,6 +433,12 @@ Content-Type: application/json
   /* ----------------------------- Wiring ----------------------------- */
   function init() {
     renderLists();
+
+    // mobile bottom tab bar
+    gridEl = document.querySelector('.ws-grid');
+    setView('console');
+    document.querySelectorAll('#wsTabbar button').forEach((b) =>
+      b.addEventListener('click', () => setView(b.dataset.view)));
 
     $('modeEncrypt').addEventListener('click', () => setMode('encrypt'));
     $('modeDecrypt').addEventListener('click', () => { if (!$('modeDecrypt').disabled) setMode('decrypt'); });

@@ -2,7 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0b0910" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <title>Delock — Encrypt, Hash &amp; Encode in Your Browser</title>
   <meta name="description" content="Delock is a local-first crypto workbench: encrypt and decrypt with AES-GCM/CBC, hash with SHA-256/512 and MD5, and convert Base64, Hex and URL — all in your browser. Keys never leave your device." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -438,6 +441,12 @@
       </div>
     </div>
   </footer>
+
+  <!-- App-style sticky CTA (mobile only) -->
+  <a href="workstation.html" class="mobile-cta">
+    Open Workstation
+    <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </a>
 
   <script src="js/main.js"></script>
 </body>
