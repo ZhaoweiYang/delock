@@ -1,4 +1,4 @@
-/* DisLeak — landing page interactions */
+/* Delock — landing page interactions */
 (function () {
   'use strict';
 
@@ -76,5 +76,5 @@
 
   /* --- Footer year --- */
   var yEl = document.querySelector('.footer-bottom span');
-  if (yEl) yEl.textContent = '© ' + new Date().getFullYear() + ' DisLeak, Inc. All rights reserved.';
+  if (yEl) yEl.textContent = '© ' + new Date().getFullYear() + ' Delock, Inc. All rights reserved.';
 })();

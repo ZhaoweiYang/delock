@@ -1,6 +1,6 @@
-# DisLeak — Landing Page
+# Delock — Landing Page
 
-A fully English marketing landing page for **DisLeak**, a data-leak &amp; dark-web
+A fully English marketing landing page for **Delock**, a data-leak &amp; dark-web
 monitoring platform. The visual design is inspired by [n8n.io](https://n8n.io):
 coral → magenta → violet gradient accents, dark-navy ink, bold geometric display
 type (Space Grotesk), rounded cards, and soft shadows.
