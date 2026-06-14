@@ -378,20 +378,35 @@
 }
 .ws-toast.show { opacity: 1; transform: translate(-50%, 0); }
 
+/* App header centered title (mobile only) */
+.ws-view-title { display: none; }
+
 /* ------------------- Mobile bottom tab bar (app nav) ---------------- */
 .ws-tabbar { display: none; }
 .ws-tabbar button {
-  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  position: relative;
+  display: flex; flex-direction: column; align-items: center; gap: 5px;
   background: none; border: 0; cursor: pointer;
-  padding: 9px 0 6px;
+  padding: 11px 0 7px;
   color: var(--muted);
   font-family: var(--font-display); font-weight: 600; font-size: 11px;
   transition: color .15s;
 }
-.ws-tabbar button svg { width: 23px; height: 23px; transition: transform .12s; }
-.ws-tabbar button:active svg { transform: scale(.88); }
+.ws-tabbar button svg { width: 23px; height: 23px; transition: transform .15s; }
+.ws-tabbar button:active svg { transform: scale(.84); }
 .ws-tabbar button.active { color: #fff; }
-.ws-tabbar button.active svg { color: var(--orange); }
+.ws-tabbar button.active svg { color: var(--orange); transform: translateY(-1px); }
+.ws-tabbar button.active::before {
+  content: ""; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+  width: 26px; height: 3px; border-radius: 0 0 3px 3px; background: var(--grad);
+  box-shadow: var(--glow);
+}
+
+/* Panel enter animation (native screen-transition feel) */
+@keyframes wsPanelIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: none; }
+}
 
 /* --------------------------- Responsive ----------------------------- */
 @media (max-width: 1080px) {
@@ -414,6 +429,18 @@
   }
   .ws-top-tag { display: none; }
 
+  /* app-style header: logo · centered title · icon back */
+  .ws-top .brand { font-size: 0; gap: 0; }
+  .ws-view-title {
+    display: flex; align-items: center;
+    position: absolute; left: 50%; top: env(safe-area-inset-top); bottom: 0;
+    transform: translateX(-50%);
+    font-family: var(--font-display); font-weight: 700; font-size: 16px; color: #fff;
+  }
+  .ws-local-badge { display: none; }
+  .ws-back { font-size: 0; padding: 9px; }
+  .ws-back svg { width: 18px; height: 18px; }
+
   .ws-grid { display: block; }
 
   /* show exactly one panel based on the active tab */
@@ -429,6 +456,11 @@
   .ws-grid[data-view="console"] .ws-params,
   .ws-grid[data-view="key"]     .ws-algos,
   .ws-grid[data-view="key"]     .ws-main { display: none; }
+
+  /* animate the active panel in (native screen transition) */
+  .ws-grid[data-view="algos"]   .ws-algos,
+  .ws-grid[data-view="console"] .ws-main,
+  .ws-grid[data-view="key"]     .ws-params { animation: wsPanelIn .3s ease both; }
 
   .ws-params { flex-direction: column; gap: 22px; }
   .ws-params .ws-field { flex: 1 1 auto; }
@@ -447,9 +479,7 @@
 }
 @media (max-width: 520px) {
   .ws-top { padding-left: 14px; padding-right: 14px; gap: 10px; }
-  .ws-top .brand { font-size: 17px; }
-  .ws-local-badge { display: none; }
-  .ws-back { padding: 8px 12px; }
+  .ws-view-title { font-size: 15px; }
   .ws-main-head { gap: 12px; }
   .ws-mode { width: 100%; }
   .ws-mode button { flex: 1; padding: 10px 12px; }

@@ -264,11 +264,14 @@
   }
 
   /* mobile bottom-tab view switching */
+  const VIEW_TITLES = { algos: 'Algorithms', console: 'Console', key: 'Key & Settings' };
   function setView(v) {
     if (!gridEl) return;
     gridEl.dataset.view = v;
     document.querySelectorAll('#wsTabbar button').forEach((b) =>
       b.classList.toggle('active', b.dataset.view === v));
+    const title = $('viewTitle');
+    if (title) title.textContent = VIEW_TITLES[v] || 'Console';
   }
 
   function setMode(m) {
