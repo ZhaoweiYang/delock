@@ -31,9 +31,10 @@
       <span class="ws-local-badge">
         <span class="dot"></span> Runs locally
       </span>
-      <button class="ws-hist-btn" id="histBtn" type="button">
-        <svg viewBox="0 0 24 24" fill="none"><path d="M3 12a9 9 0 1 0 3-6.7L3 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 4v4h4M12 8v4l3 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        History
+      <button class="ws-vault-btn" id="vaultBtn" type="button">
+        <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="16" rx="2.5" stroke="currentColor" stroke-width="1.8"/><path d="M3 9h18" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="14.5" r="2" stroke="currentColor" stroke-width="1.8"/></svg>
+        Vault
+        <span class="ws-vault-badge" id="vaultBadgeTop">0</span>
       </button>
       <a href="index.html" class="btn btn-ghost ws-back">
         <svg viewBox="0 0 24 24" fill="none"><path d="M19 12H5M11 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -183,9 +184,10 @@
       <svg viewBox="0 0 24 24" fill="none"><path d="M8 11V7.5A4 4 0 0 1 15.5 5.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><rect x="5" y="11" width="14" height="9" rx="2" stroke="currentColor" stroke-width="1.8"/></svg>
       <span>Decrypt</span>
     </button>
-    <button id="histTab" type="button">
-      <svg viewBox="0 0 24 24" fill="none"><path d="M3 12a9 9 0 1 0 3-6.7L3 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 4v4h4M12 8v4l3 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <span>History</span>
+    <button id="vaultTab" type="button" class="ws-tab-vault">
+      <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="16" rx="2.5" stroke="currentColor" stroke-width="1.8"/><path d="M3 9h18" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="14.5" r="2" stroke="currentColor" stroke-width="1.8"/></svg>
+      <span>Vault</span>
+      <span class="ws-tab-badge" id="vaultBadgeTab" hidden>0</span>
     </button>
     <button data-view="more" type="button">
       <svg viewBox="0 0 24 24" fill="none"><circle cx="5" cy="12" r="1.7" fill="currentColor"/><circle cx="12" cy="12" r="1.7" fill="currentColor"/><circle cx="19" cy="12" r="1.7" fill="currentColor"/></svg>
@@ -193,16 +195,32 @@
     </button>
   </nav>
 
-  <!-- ===================== UNLOCK HISTORY ===================== -->
-  <div class="ws-history" id="historyPanel" hidden>
-    <div class="ws-history-head">
-      <button class="ws-history-close" id="histClose" type="button" aria-label="Close">
+  <!-- ===================== VAULT (files & resources) ===================== -->
+  <div class="ws-vault" id="vaultPanel" hidden>
+    <div class="ws-vault-head">
+      <button class="ws-vault-close" id="vaultClose" type="button" aria-label="Close">
         <svg viewBox="0 0 24 24" fill="none"><path d="M19 12H5M11 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
-      <h2>Unlock history</h2>
-      <button class="ws-history-clear" id="histClear" type="button">Clear</button>
+      <div class="ws-vault-titlewrap">
+        <h2>Vault</h2>
+        <span class="ws-vault-count" id="vaultCount">0 items</span>
+      </div>
+      <button class="ws-vault-clear" id="vaultClear" type="button">Clear all</button>
     </div>
-    <div class="ws-history-body" id="historyList"></div>
+    <div class="ws-vault-tools">
+      <label class="ws-vault-search">
+        <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/><path d="M21 21l-4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        <input id="vaultSearch" type="text" placeholder="Search your vault…" autocomplete="off" spellcheck="false" />
+      </label>
+      <div class="ws-vault-filters" id="vaultFilters">
+        <button class="active" data-filter="all" type="button">All</button>
+        <button data-filter="decrypt" type="button">Unlocked</button>
+        <button data-filter="encrypt" type="button">Encrypted</button>
+        <button data-filter="file" type="button">Files</button>
+        <button data-filter="hash" type="button">Hashes</button>
+      </div>
+    </div>
+    <div class="ws-vault-body" id="vaultList"></div>
   </div>
 
   <div class="ws-toast" id="toast"></div>

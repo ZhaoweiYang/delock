@@ -380,14 +380,11 @@ Content-Type: application/json
       if (result instanceof Uint8Array) {
         if (inputTab === 'file') {
           offerDownload(result, (fileName || 'output').replace(/\.delock\.txt$/, '') || 'decrypted.bin');
-          const msg = `Decrypted ${result.length} bytes — download ready.`;
-          showOutput(msg, true);
-          if (mode === 'decrypt') recordUnlock({ type: 'Decrypt', algoId: current.id, algo: current.name, fmt: format, source: 'file', input: fileName || '(file)', output: msg });
+          showOutput(`Decrypted ${result.length} bytes — download ready.`, true);
         } else {
-          const text = dec.decode(result);
-          showOutput(text, true);
-          if (mode === 'decrypt') recordUnlock({ type: 'Decrypt', algoId: current.id, algo: current.name, fmt: format, source: 'text', input: $('inputText').value, output: text });
+          showOutput(dec.decode(result), true);
         }
+        recordItem();
         return;
       }
 
@@ -398,10 +395,7 @@ Content-Type: application/json
         offerDownloadBlob(blob, dlName);
       }
       showOutput(result, true);
-      if (mode === 'decrypt') {
-        const label = ['base64', 'hex', 'url'].includes(current.type) ? 'Decode' : 'Decrypt';
-        recordUnlock({ type: label, algoId: current.id, algo: current.name, fmt: format, source: inputTab === 'file' ? 'file' : 'text', input: inputTab === 'file' ? (fileName || '(file)') : $('inputText').value, output: result });
-      }
+      recordItem();
     } catch (e) {
       showOutput((mode === 'decrypt' ? 'Decryption failed — check your key, format and input. ' : '') + (e.message || e), false);
     } finally {
@@ -467,61 +461,148 @@ Content-Type: application/json
     updateApiSnippet();
   }
 
-  /* ----------------------- Unlock history --------------------------- */
-  const HKEY = 'delock.history';
-  let unlocks = [];
-  function loadHistory() { try { unlocks = JSON.parse(localStorage.getItem(HKEY) || '[]'); } catch (e) { unlocks = []; } }
-  function saveHistory() { try { localStorage.setItem(HKEY, JSON.stringify(unlocks.slice(0, 50))); } catch (e) { /* ignore quota */ } }
-  function recordUnlock(entry) {
-    entry.id = 'h' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
-    entry.ts = Date.now();
-    unlocks.unshift(entry);
-    unlocks = unlocks.slice(0, 50);
-    saveHistory();
+  /* ===================== Vault (files & resources) ================== */
+  const VKEY = 'delock.vault';
+  let vault = [];
+  let vaultFilter = 'all', vaultQuery = '';
+  const KIND = {
+    decrypt: { label: 'Unlocked', cls: 'decrypt' },
+    decode:  { label: 'Decoded',  cls: 'decode' },
+    encrypt: { label: 'Encrypted', cls: 'encrypt' },
+    encode:  { label: 'Encoded',  cls: 'encode' },
+    hash:    { label: 'Hash',     cls: 'hash' }
+  };
+
+  function loadVault() { try { vault = JSON.parse(localStorage.getItem(VKEY) || '[]'); } catch (e) { vault = []; } }
+  function saveVault() { try { localStorage.setItem(VKEY, JSON.stringify(vault.slice(0, 200))); } catch (e) { /* quota */ } }
+  function kindOf() {
+    if (current.type === 'hash' || current.type === 'md5') return 'hash';
+    if (['base64', 'hex', 'url'].includes(current.type)) return mode === 'encrypt' ? 'encode' : 'decode';
+    return mode === 'encrypt' ? 'encrypt' : 'decrypt';
+  }
+  function defaultTitle(e) {
+    if (e.source === 'file') return e.input || 'File';
+    const o = (e.output || '').trim().replace(/\s+/g, ' ');
+    return o ? (o.length > 44 ? o.slice(0, 44) + '…' : o) : ((KIND[e.kind] || {}).label || 'Item');
+  }
+  function saveItem(e) {
+    e.id = 'v' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+    e.ts = Date.now();
+    e.title = defaultTitle(e);
+    vault.unshift(e);
+    vault = vault.slice(0, 200);
+    saveVault();
+    updateVaultCount();
+  }
+  function recordItem() {
+    saveItem({
+      kind: kindOf(),
+      algoId: current.id, algo: current.name, fmt: format,
+      source: inputTab === 'file' ? 'file' : 'text',
+      input: inputTab === 'file' ? (fileName || '(file)') : $('inputText').value,
+      output: $('outputText').textContent
+    });
+  }
+  function updateVaultCount() {
+    const n = vault.length;
+    $('vaultCount').textContent = n + (n === 1 ? ' item' : ' items');
+    const top = $('vaultBadgeTop');
+    top.textContent = n > 99 ? '99+' : n; top.hidden = n === 0;
+    const tb = $('vaultBadgeTab');
+    tb.textContent = n > 99 ? '99+' : n; tb.hidden = n === 0;
   }
   function escapeHtml(s) {
     return String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   }
-  function renderHistory() {
-    const box = $('historyList');
-    if (!unlocks.length) {
-      box.innerHTML = '<div class="hist-empty">No unlocked content yet.<br>Decrypt or decode something and it will appear here.</div>';
+  function vaultFiltered() {
+    const q = vaultQuery.toLowerCase();
+    return vault.filter((e) => {
+      const f = vaultFilter;
+      const okF = f === 'all' ? true
+        : f === 'file' ? e.source === 'file'
+        : f === 'decrypt' ? (e.kind === 'decrypt' || e.kind === 'decode')
+        : f === 'encrypt' ? (e.kind === 'encrypt' || e.kind === 'encode')
+        : f === 'hash' ? e.kind === 'hash' : true;
+      const okQ = !q || (e.title || '').toLowerCase().includes(q) ||
+        (e.algo || '').toLowerCase().includes(q) || (e.output || '').toLowerCase().includes(q);
+      return okF && okQ;
+    });
+  }
+  const fileIcoSvg = '<svg class="vault-file-ico" viewBox="0 0 24 24" fill="none"><path d="M7 3h7l5 5v13H7z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M14 3v5h5" stroke="currentColor" stroke-width="1.7"/></svg>';
+  function renderVault() {
+    const box = $('vaultList');
+    const items = vaultFiltered();
+    if (!items.length) {
+      box.innerHTML = '<div class="vault-empty">' + (vault.length
+        ? 'No items match your search or filter.'
+        : 'Your vault is empty.<br>Encrypt, decrypt or encode something and it will be saved here.') + '</div>';
       return;
     }
-    box.innerHTML = unlocks.map((e) => {
+    box.innerHTML = items.map((e) => {
+      const k = KIND[e.kind] || { label: e.kind, cls: 'hash' };
       const t = new Date(e.ts).toLocaleString();
-      const preview = (e.source === 'text' ? e.output : e.input) || '';
-      const prev = escapeHtml(preview.length > 160 ? preview.slice(0, 160) + '…' : preview) || '(empty)';
-      const cls = e.type === 'Decode' ? 'decode' : 'decrypt';
-      return `<button class="hist-item" data-id="${e.id}">
-        <div class="hist-row"><span class="hist-badge ${cls}">${e.type}</span><span class="hist-algo">${escapeHtml(e.algo)}</span><span class="hist-time">${t}</span></div>
-        <div class="hist-preview">${prev}</div>
-      </button>`;
+      const prev = escapeHtml((e.output || '').length > 180 ? e.output.slice(0, 180) + '…' : (e.output || '')) || '(empty)';
+      return `<div class="vault-card" data-id="${e.id}">
+        <div class="vault-card-top">
+          <span class="vault-badge ${k.cls}">${k.label}</span>
+          ${e.source === 'file' ? fileIcoSvg : ''}
+          <span class="vault-algo">${escapeHtml(e.algo)}</span>
+          <span class="vault-date">${t}</span>
+        </div>
+        <div class="vault-card-title">${escapeHtml(e.title)}</div>
+        <div class="vault-card-preview">${prev}</div>
+        <div class="vault-card-actions">
+          <button data-act="open">Open</button>
+          <button data-act="copy">Copy</button>
+          <button data-act="download">Download</button>
+          <button data-act="rename">Rename</button>
+          <button data-act="delete">Delete</button>
+        </div>
+      </div>`;
     }).join('');
-    box.querySelectorAll('.hist-item').forEach((it) =>
-      it.addEventListener('click', () => restoreHistory(it.dataset.id)));
   }
-  function openHistory() { renderHistory(); $('historyPanel').hidden = false; }
-  function closeHistory() { $('historyPanel').hidden = true; }
-  function clearHistory() { unlocks = []; saveHistory(); renderHistory(); }
-  function restoreHistory(id) {
-    const e = unlocks.find((x) => x.id === id);
+  function openVault() { renderVault(); $('vaultPanel').hidden = false; }
+  function closeVault() { $('vaultPanel').hidden = true; }
+  function clearVault() {
+    if (!vault.length) return;
+    if (!confirm('Clear all items from your vault? This cannot be undone.')) return;
+    vault = []; saveVault(); updateVaultCount(); renderVault();
+  }
+  function sanitizeName(s) { return (s || 'delock').replace(/[^\w.-]+/g, '_').slice(0, 40); }
+  function vaultAction(id, act) {
+    const e = vault.find((x) => x.id === id);
     if (!e) return;
-    closeHistory();
-    if (e.source !== 'text') { toast('File unlocks can’t be reopened'); return; }
-    selectAlgo(e.algoId);
-    setFormat(e.fmt || 'base64');
-    setInputTab('text');
-    $('inputText').value = e.input || '';
-    setView('decrypt');
-    showOutput(e.output || '', true);
-    toast('Loaded from history');
+    if (act === 'copy') {
+      navigator.clipboard.writeText(e.output || '').then(() => toast('Copied to clipboard'));
+    } else if (act === 'download') {
+      offerDownloadBlob(new Blob([e.output || ''], { type: 'text/plain' }), sanitizeName(e.title) + '.txt');
+      $('downloadLink').click();
+      toast('Downloading…');
+    } else if (act === 'delete') {
+      vault = vault.filter((x) => x.id !== id); saveVault(); updateVaultCount(); renderVault();
+    } else if (act === 'rename') {
+      const name = prompt('Rename item', e.title);
+      if (name && name.trim()) { e.title = name.trim().slice(0, 80); saveVault(); renderVault(); }
+    } else if (act === 'open') {
+      if (e.source !== 'text') { toast('File items — use Download'); return; }
+      closeVault();
+      selectAlgo(e.algoId);
+      setFormat(e.fmt || 'base64');
+      setInputTab('text');
+      $('inputText').value = e.input || '';
+      const view = (e.kind === 'encrypt' || e.kind === 'encode') ? 'encrypt'
+        : (e.kind === 'decrypt' || e.kind === 'decode') ? 'decrypt' : 'encrypt';
+      setView(view);
+      showOutput(e.output || '', true);
+      toast('Loaded from vault');
+    }
   }
 
   /* ----------------------------- Wiring ----------------------------- */
   function init() {
     renderLists();
-    loadHistory();
+    loadVault();
+    updateVaultCount();
 
     // mobile bottom tab bar
     gridEl = document.querySelector('.ws-grid');
@@ -532,11 +613,24 @@ Content-Type: application/json
     // mobile algorithm selector (collapsible)
     $('algosToggle').addEventListener('click', () => $('wsAlgos').classList.toggle('open'));
 
-    // history triggers (mobile tab + desktop button) and panel controls
-    $('histTab').addEventListener('click', openHistory);
-    $('histBtn').addEventListener('click', openHistory);
-    $('histClose').addEventListener('click', closeHistory);
-    $('histClear').addEventListener('click', clearHistory);
+    // vault: entry points (desktop button + mobile tab) and controls
+    $('vaultTab').addEventListener('click', openVault);
+    $('vaultBtn').addEventListener('click', openVault);
+    $('vaultClose').addEventListener('click', closeVault);
+    $('vaultClear').addEventListener('click', clearVault);
+    $('vaultSearch').addEventListener('input', (e) => { vaultQuery = e.target.value; renderVault(); });
+    document.querySelectorAll('#vaultFilters button').forEach((b) => {
+      b.addEventListener('click', () => {
+        vaultFilter = b.dataset.filter;
+        document.querySelectorAll('#vaultFilters button').forEach((x) => x.classList.toggle('active', x === b));
+        renderVault();
+      });
+    });
+    $('vaultList').addEventListener('click', (e) => {
+      const btn = e.target.closest('button[data-act]');
+      const card = e.target.closest('.vault-card');
+      if (btn && card) vaultAction(card.dataset.id, btn.dataset.act);
+    });
 
     $('modeEncrypt').addEventListener('click', () => setMode('encrypt'));
     $('modeDecrypt').addEventListener('click', () => { if (!$('modeDecrypt').disabled) setMode('decrypt'); });
