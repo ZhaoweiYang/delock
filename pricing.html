@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0b0910" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>Membership — Delock</title>
+  <meta name="description" content="Choose a Delock plan and check out — Free or Premium." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/pricing.css" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%23ff5a1f'/%3E%3Cpath d='M11 14v-2a5 5 0 0 1 10 0v2m-11 0h12v9H10z' fill='none' stroke='white' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E" />
+</head>
+<body class="pay-body">
+
+  <!-- ===================== TOPBAR ===================== -->
+  <header class="pay-top">
+    <a href="index.html" class="brand">
+      <span class="logo-mark">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M8 11V8a4 4 0 0 1 8 0v3" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/><rect x="5" y="11" width="14" height="9" rx="2" stroke="#fff" stroke-width="1.8"/></svg>
+      </span>
+      Delock
+    </a>
+    <span class="pay-top-tag">Membership</span>
+    <a href="index.html" class="btn btn-ghost pay-back">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M19 12H5M11 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Back to site
+    </a>
+  </header>
+
+  <main class="pay">
+    <div class="pay-head">
+      <span class="eyebrow">Membership</span>
+      <h1>Choose your plan</h1>
+      <p>Upgrade for more monthly unlocks, credits, and dedicated support. Cancel anytime.</p>
+      <div class="pay-billing" id="billing">
+        <button class="active" data-cycle="monthly" type="button">Monthly</button>
+        <button data-cycle="annual" type="button">Annual <span class="save">−20%</span></button>
+      </div>
+    </div>
+
+    <div class="pay-grid">
+      <!-- PLAN SELECTION -->
+      <section class="pay-plans" id="plans">
+        <button class="plan" data-plan="free" type="button">
+          <span class="plan-radio"></span>
+          <span class="plan-main">
+            <span class="plan-name">Free</span>
+            <span class="plan-blurb">For trying things out and the occasional encrypt</span>
+            <span class="plan-feats">Unlock 1 item · Encrypt 10 items · 10 credits · Community support</span>
+          </span>
+          <span class="plan-price"><b id="priceFree">$0</b><span>/mo</span></span>
+        </button>
+
+        <button class="plan selected" data-plan="premium" type="button">
+          <span class="plan-flag">Best value</span>
+          <span class="plan-radio"></span>
+          <span class="plan-main">
+            <span class="plan-name">Premium</span>
+            <span class="plan-blurb">For power users who encrypt and unlock every day</span>
+            <span class="plan-feats">Unlock 10/mo · Encrypt unlimited · 1,000 credits · Dedicated support</span>
+          </span>
+          <span class="plan-price"><b id="pricePremium">$19.90</b><span id="premiumPer">/mo</span></span>
+        </button>
+      </section>
+
+      <!-- CHECKOUT -->
+      <aside class="pay-checkout">
+        <div class="pay-card">
+          <h3>Order summary</h3>
+          <div class="sum-row"><span>Plan</span><b id="sumPlan">Premium</b></div>
+          <div class="sum-row"><span>Billing</span><b id="sumCycle">Monthly</b></div>
+          <div class="sum-row"><span>Subtotal</span><b id="sumSubtotal">$19.90</b></div>
+          <div class="sum-row sum-total"><span>Total due today</span><b id="sumTotal">$19.90</b></div>
+          <p class="sum-note" id="sumNote">Renews monthly at $19.90. Cancel anytime.</p>
+
+          <form class="pay-form" id="payForm" novalidate>
+            <label class="ws-label">Email</label>
+            <div class="pay-input">
+              <input id="email" type="email" placeholder="you@example.com" autocomplete="email" />
+            </div>
+
+            <div class="pay-card-fields" id="cardFields">
+              <label class="ws-label">Card number</label>
+              <div class="pay-input">
+                <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="2.5" stroke="currentColor" stroke-width="1.7"/><path d="M3 9h18" stroke="currentColor" stroke-width="1.7"/></svg>
+                <input id="card" inputmode="numeric" autocomplete="cc-number" placeholder="1234 5678 9012 3456" />
+              </div>
+              <div class="pay-row2">
+                <div>
+                  <label class="ws-label">Expiry</label>
+                  <div class="pay-input"><input id="exp" inputmode="numeric" autocomplete="cc-exp" placeholder="MM / YY" /></div>
+                </div>
+                <div>
+                  <label class="ws-label">CVC</label>
+                  <div class="pay-input"><input id="cvc" inputmode="numeric" autocomplete="cc-csc" placeholder="123" /></div>
+                </div>
+              </div>
+              <label class="ws-label">Name on card</label>
+              <div class="pay-input"><input id="name" autocomplete="cc-name" placeholder="Jane Appleseed" /></div>
+            </div>
+
+            <button class="pay-btn" id="payBtn" type="submit">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M8 11V8a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><rect x="5" y="11" width="14" height="9" rx="2" stroke="currentColor" stroke-width="1.8"/></svg>
+              <span id="payBtnLabel">Pay $19.90</span>
+            </button>
+            <p class="secure-note">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M12 2l8 3v6c0 5-3.4 9-8 11-4.6-2-8-6-8-11V5l8-3z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+              Encrypted &amp; secure. This is a demo checkout — no real charge is made.
+            </p>
+          </form>
+
+          <div class="pay-success" id="paySuccess" hidden>
+            <span class="ok-ring"><svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <h3 id="successTitle">You're all set</h3>
+            <p id="successText">Welcome to Delock Premium.</p>
+            <a href="workstation.html" class="btn btn-grad btn-lg">Open Workstation</a>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <script src="js/pricing.js"></script>
+</body>
+</html>

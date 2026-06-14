@@ -13,6 +13,9 @@ floating pill navbar, announcement bar, glowing hero, bold geometric display typ
   algorithms, testimonials, FAQ, CTA) with an **Open Workstation** button.
 - **`workstation.html`** — the functional three-column console: algorithm
   sidebar, Encrypt/Decrypt + Text/File/API input, and a parameters/key panel.
+  On mobile it becomes an app shell with an Encrypt / Decrypt / More bottom tab bar.
+- **`pricing.html`** — dedicated membership / checkout page: Free vs Premium
+  plan selection, monthly/annual toggle, order summary and a demo payment form.
 
 ## Workstation features
 
