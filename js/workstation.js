@@ -260,18 +260,26 @@
     updateExplain();
     updateApiSnippet();
     clearOutput();
-    if (window.innerWidth <= 760) setView('console');   // jump to console after picking
+    updateTabState();
   }
 
-  /* mobile bottom-tab view switching */
-  const VIEW_TITLES = { algos: 'Algorithms', console: 'Console', key: 'Key & Settings' };
+  /* mobile bottom-tab view switching (Encrypt / Decrypt / More) */
+  const VIEW_TITLES = { encrypt: 'Encrypt', decrypt: 'Decrypt', more: 'More' };
   function setView(v) {
     if (!gridEl) return;
+    if (v === 'decrypt' && !current.reversible) v = 'encrypt';   // one-way algos can't decrypt
     gridEl.dataset.view = v;
     document.querySelectorAll('#wsTabbar button').forEach((b) =>
       b.classList.toggle('active', b.dataset.view === v));
     const title = $('viewTitle');
-    if (title) title.textContent = VIEW_TITLES[v] || 'Console';
+    if (title) title.textContent = VIEW_TITLES[v] || 'Encrypt';
+    if (v === 'encrypt') setMode('encrypt');
+    else if (v === 'decrypt') setMode('decrypt');
+  }
+  function updateTabState() {
+    const dec = document.querySelector('#wsTabbar button[data-view="decrypt"]');
+    if (dec) dec.classList.toggle('disabled', !current.reversible);
+    if (!current.reversible && gridEl && gridEl.dataset.view === 'decrypt') setView('encrypt');
   }
 
   function setMode(m) {
@@ -439,9 +447,9 @@ Content-Type: application/json
 
     // mobile bottom tab bar
     gridEl = document.querySelector('.ws-grid');
-    setView('console');
+    setView('encrypt');
     document.querySelectorAll('#wsTabbar button').forEach((b) =>
-      b.addEventListener('click', () => setView(b.dataset.view)));
+      b.addEventListener('click', () => { if (!b.classList.contains('disabled')) setView(b.dataset.view); }));
 
     $('modeEncrypt').addEventListener('click', () => setMode('encrypt'));
     $('modeDecrypt').addEventListener('click', () => { if (!$('modeDecrypt').disabled) setMode('decrypt'); });

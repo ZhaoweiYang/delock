@@ -401,6 +401,7 @@
   width: 26px; height: 3px; border-radius: 0 0 3px 3px; background: var(--grad);
   box-shadow: var(--glow);
 }
+.ws-tabbar button.disabled { opacity: .3; pointer-events: none; }
 
 /* Panel enter animation (native screen-transition feel) */
 @keyframes wsPanelIn {
@@ -442,25 +443,25 @@
   .ws-back svg { width: 18px; height: 18px; }
 
   .ws-grid { display: block; }
+  .ws-mode { display: none; }   /* mode is driven by the Encrypt / Decrypt tabs */
 
-  /* show exactly one panel based on the active tab */
-  .ws-side, .ws-main {
-    border: 0 !important;
+  /* one screen at a time */
+  .ws-side, .ws-main { border: 0 !important; padding: 18px 16px; }
+  .ws-main, .ws-params { padding-bottom: calc(88px + env(safe-area-inset-bottom)); }
+  .ws-main {
     min-height: calc(100vh - 60px - env(safe-area-inset-top));
     min-height: calc(100dvh - 60px - env(safe-area-inset-top));
-    padding: 18px 16px calc(88px + env(safe-area-inset-bottom));
   }
-  .ws-grid[data-view="algos"]   .ws-main,
-  .ws-grid[data-view="algos"]   .ws-params,
-  .ws-grid[data-view="console"] .ws-algos,
-  .ws-grid[data-view="console"] .ws-params,
-  .ws-grid[data-view="key"]     .ws-algos,
-  .ws-grid[data-view="key"]     .ws-main { display: none; }
+  .ws-grid[data-view="encrypt"] .ws-algos,
+  .ws-grid[data-view="encrypt"] .ws-params,
+  .ws-grid[data-view="decrypt"] .ws-algos,
+  .ws-grid[data-view="decrypt"] .ws-params,
+  .ws-grid[data-view="more"]    .ws-main { display: none; }
 
-  /* animate the active panel in (native screen transition) */
-  .ws-grid[data-view="algos"]   .ws-algos,
-  .ws-grid[data-view="console"] .ws-main,
-  .ws-grid[data-view="key"]     .ws-params { animation: wsPanelIn .3s ease both; }
+  /* animate the active screen in (native transition feel) */
+  .ws-grid[data-view="encrypt"] .ws-main,
+  .ws-grid[data-view="decrypt"] .ws-main,
+  .ws-grid[data-view="more"]    .ws-algos { animation: wsPanelIn .3s ease both; }
 
   .ws-params { flex-direction: column; gap: 22px; }
   .ws-params .ws-field { flex: 1 1 auto; }

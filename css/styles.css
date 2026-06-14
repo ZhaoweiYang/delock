@@ -600,6 +600,10 @@ section { scroll-margin-top: 96px; }
   gap: 24px;
   align-items: stretch;
 }
+/* two-plan membership layout (applied above the mobile single-column rule) */
+@media (min-width: 720px) {
+  .pricing-grid.duo { grid-template-columns: repeat(2, 1fr); max-width: 780px; margin: 0 auto; }
+}
 .price-card {
   background: var(--surface);
   border: 1px solid var(--line);
