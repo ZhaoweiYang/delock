@@ -256,6 +256,10 @@
     const usesFormat = current.key || current.type === 'hash' || current.type === 'md5';
     $('formatField').classList.toggle('dim-disabled', !usesFormat);
 
+    $('algosCurrent').textContent = current.name;
+    const algosEl = $('wsAlgos');
+    if (algosEl) algosEl.classList.remove('open');   // collapse selector after picking (mobile)
+
     updateRunLabel();
     updateExplain();
     updateApiSnippet();
@@ -524,6 +528,9 @@ Content-Type: application/json
     setView('encrypt');
     document.querySelectorAll('#wsTabbar button[data-view]').forEach((b) =>
       b.addEventListener('click', () => { if (!b.classList.contains('disabled')) setView(b.dataset.view); }));
+
+    // mobile algorithm selector (collapsible)
+    $('algosToggle').addEventListener('click', () => $('wsAlgos').classList.toggle('open'));
 
     // history triggers (mobile tab + desktop button) and panel controls
     $('histTab').addEventListener('click', openHistory);

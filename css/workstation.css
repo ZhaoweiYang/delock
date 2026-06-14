@@ -105,6 +105,24 @@
 .ws-item.active .ws-name { color: #fff; }
 .ws-item.active .ws-tag { color: #ffb48c; border-color: rgba(255,90,31,.4); background: rgba(255,90,31,.12); }
 
+/* Mobile algorithm selector (collapsible) — hidden on desktop */
+.ws-algos-toggle {
+  display: none;
+  width: 100%; align-items: center; gap: 10px;
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: 14px; padding: 14px 16px; cursor: pointer; text-align: left;
+  color: #e3e2ee;
+}
+.ws-algos-lbl {
+  font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--muted);
+}
+.ws-algos-cur {
+  font-family: "JetBrains Mono", monospace; font-weight: 600; font-size: 15px; color: #fff;
+}
+.ws-algos-toggle .chev { width: 18px; height: 18px; margin-left: auto; color: var(--muted); transition: transform .2s; }
+.ws-algos.open .ws-algos-toggle .chev { transform: rotate(180deg); }
+
 /* ----------------------------- Console ------------------------------ */
 .ws-main-head { display: flex; align-items: center; gap: 18px; margin-bottom: 22px; flex-wrap: wrap; }
 .ws-mode {
@@ -443,7 +461,7 @@
   .ws-back svg { width: 18px; height: 18px; }
 
   .ws-grid { display: block; }
-  .ws-mode { display: none; }   /* mode is driven by the Encrypt / Decrypt tabs */
+  .ws-main-head { display: none; }   /* mode = bottom tabs, algorithm = selector below */
 
   /* one screen at a time */
   .ws-side, .ws-main { border: 0 !important; padding: 18px 16px; }
@@ -452,16 +470,22 @@
     min-height: calc(100vh - 60px - env(safe-area-inset-top));
     min-height: calc(100dvh - 60px - env(safe-area-inset-top));
   }
-  .ws-grid[data-view="encrypt"] .ws-algos,
+
+  /* algorithm selector lives inside the Encrypt/Decrypt screens */
+  .ws-algos-toggle { display: flex; }
+  .ws-algos { padding-bottom: 0; }
+  .ws-algos .ws-group { display: none; margin-top: 12px; }
+  .ws-algos.open .ws-group { display: block; }
+
   .ws-grid[data-view="encrypt"] .ws-params,
-  .ws-grid[data-view="decrypt"] .ws-algos,
   .ws-grid[data-view="decrypt"] .ws-params,
-  .ws-grid[data-view="more"]    .ws-main { display: none; }
+  .ws-grid[data-view="more"]    .ws-main,
+  .ws-grid[data-view="more"]    .ws-algos { display: none; }
 
   /* animate the active screen in (native transition feel) */
   .ws-grid[data-view="encrypt"] .ws-main,
   .ws-grid[data-view="decrypt"] .ws-main,
-  .ws-grid[data-view="more"]    .ws-algos { animation: wsPanelIn .3s ease both; }
+  .ws-grid[data-view="more"]    .ws-params { animation: wsPanelIn .3s ease both; }
 
   .ws-params { flex-direction: column; gap: 22px; }
   .ws-params .ws-field { flex: 1 1 auto; }
