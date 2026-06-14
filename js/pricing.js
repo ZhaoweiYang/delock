@@ -69,6 +69,24 @@
       b.addEventListener('click', () => setCycle(b.dataset.cycle)));
     $('payBtn').addEventListener('click', onContinue);
 
+    // exit-intent: offer a $0.01 3-day trial when leaving via the back button
+    const back = document.querySelector('.pay-back');
+    const trial = $('trialModal');
+    const hideTrial = () => { trial.hidden = true; };
+    if (back) back.addEventListener('click', (e) => { e.preventDefault(); trial.hidden = false; });
+    $('trialClose').addEventListener('click', hideTrial);
+    $('trialBackdrop').addEventListener('click', hideTrial);
+    $('trialLeave').addEventListener('click', () => { location.href = (back && back.getAttribute('href')) || 'index.html'; });
+    $('trialAccept').addEventListener('click', () => {
+      hideTrial();
+      $('payBtn').hidden = true;
+      $('paySuccess').hidden = false;
+      $('successTitle').textContent = 'Your 3-day trial is active';
+      $('successText').textContent = 'Enjoy 1 free unlock. You’ll be charged $0.01 for the 3-day trial.';
+      $('paySuccess').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !trial.hidden) hideTrial(); });
+
     render();
   }
 

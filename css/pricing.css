@@ -199,3 +199,41 @@
   .plan-blurb { display: none; }
   .pay-card { padding: 20px 16px; }
 }
+
+/* ------------------- Exit-intent trial modal ----------------------- */
+.trial-modal { position: fixed; inset: 0; z-index: 80; display: grid; place-items: center; padding: 20px; }
+.trial-modal[hidden] { display: none; }
+.trial-backdrop { position: absolute; inset: 0; background: rgba(6, 5, 10, .72); backdrop-filter: blur(4px); }
+.trial-card {
+  position: relative; z-index: 1; width: 100%; max-width: 400px;
+  background: linear-gradient(180deg, #16131f, #100d18);
+  border: 1px solid var(--line-2); border-radius: 22px;
+  padding: 32px 26px 26px; text-align: center;
+  box-shadow: var(--shadow-lg);
+  animation: trialIn .25s ease both;
+}
+@keyframes trialIn { from { opacity: 0; transform: translateY(16px) scale(.97); } to { opacity: 1; transform: none; } }
+.trial-x {
+  position: absolute; top: 14px; right: 14px;
+  width: 34px; height: 34px; border-radius: 10px;
+  display: grid; place-items: center; cursor: pointer;
+  background: rgba(255,255,255,.05); border: 1px solid var(--line); color: #c9c8da;
+}
+.trial-x svg { width: 16px; height: 16px; }
+.trial-ico {
+  width: 56px; height: 56px; border-radius: 16px; margin: 0 auto 16px;
+  display: grid; place-items: center;
+  background: rgba(255,90,31,.14); color: var(--orange);
+}
+.trial-ico svg { width: 28px; height: 28px; }
+.trial-card h3 { font-size: 22px; margin: 0 0 10px; }
+.trial-card p { color: var(--muted); font-size: 15px; line-height: 1.55; margin: 0 0 22px; }
+.trial-card p b { color: #fff; }
+.trial-accept { width: 100%; }
+.trial-leave {
+  display: block; width: 100%; margin-top: 12px;
+  background: none; border: 0; cursor: pointer;
+  color: var(--muted); font-family: var(--font-display); font-weight: 600; font-size: 14px;
+  padding: 8px;
+}
+.trial-leave:hover { color: #e3e2ee; }

@@ -103,6 +103,23 @@
     </div>
   </main>
 
+  <!-- exit-intent trial offer -->
+  <div class="trial-modal" id="trialModal" hidden>
+    <div class="trial-backdrop" id="trialBackdrop"></div>
+    <div class="trial-card" role="dialog" aria-modal="true" aria-labelledby="trialTitle">
+      <button class="trial-x" id="trialClose" type="button" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+      <span class="trial-ico">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M20 12v9H4v-9M2 7h20v5H2zM12 22V7M12 7S11 3 8 3 4.5 6 8 7M12 7s1-4 4-4 3.5 3 0 4" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
+      </span>
+      <h3 id="trialTitle">Wait — try Delock for $0.01</h3>
+      <p>Start a <b>3-day trial</b> for just <b>$0.01</b>, including <b>1 free content unlock</b>. Cancel anytime before it ends.</p>
+      <button class="btn btn-grad btn-lg trial-accept" id="trialAccept" type="button">Start 3-day trial · $0.01</button>
+      <button class="trial-leave" id="trialLeave" type="button">No thanks, leave</button>
+    </div>
+  </div>
+
   <script src="js/pricing.js"></script>
 </body>
 </html>
