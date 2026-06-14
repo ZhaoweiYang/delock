@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DisLeak — Data Leak &amp; Dark Web Monitoring</title>
+  <meta name="description" content="DisLeak continuously scans the dark web, paste sites, and breach dumps to detect leaked credentials, secrets, and sensitive data — and alerts you before attackers strike." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%23ea4b71'/%3E%3Cpath d='M16 6l8 3v6c0 5-3.4 8.6-8 10-4.6-1.4-8-5-8-10V9l8-3z' fill='none' stroke='white' stroke-width='2'/%3E%3C/svg%3E" />
+</head>
+<body>
+
+  <!-- ============================ NAV ============================ -->
+  <header class="nav" id="nav">
+    <div class="container nav-inner">
+      <a href="#top" class="brand">
+        <span class="logo-mark">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M12 2l8 3v6c0 5-3.4 9-8 11-4.6-2-8-6-8-11V5l8-3z" stroke="#fff" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        DisLeak
+      </a>
+      <ul class="nav-links">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#how">How it works</a></li>
+        <li><a href="#integrations">Integrations</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+        <li><a href="#faq">FAQ</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="#" class="link">Sign in</a>
+        <a href="#cta" class="btn btn-grad">Start free scan</a>
+      </div>
+      <button class="nav-toggle" id="navToggle" aria-label="Menu"><span></span></button>
+    </div>
+  </header>
+
+  <main id="top">
+
+    <!-- ============================ HERO ============================ -->
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="reveal">
+          <span class="badge-pill"><span class="tag">NEW</span> Continuous dark-web monitoring, now in real time</span>
+          <h1>Find your data leaks <span class="grad-text">before attackers do</span></h1>
+          <p class="lead">DisLeak scans the dark web, paste sites, breach dumps, and public code repositories around the clock — surfacing leaked credentials, API keys, and sensitive records so you can act before a leak becomes a breach.</p>
+          <div class="hero-cta">
+            <a href="#cta" class="btn btn-grad btn-lg">Start free scan
+              <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+            <a href="#how" class="btn btn-ghost btn-lg">See how it works</a>
+          </div>
+          <p class="hero-note">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            No credit card required · Results in under 2 minutes
+          </p>
+        </div>
+
+        <div class="reveal" style="position:relative">
+          <div class="scanner">
+            <div class="scanner-bar">
+              <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+              <span class="title">disleak — live scan</span>
+            </div>
+            <div class="scanner-body">
+              <div class="row"><span class="muted">$</span> disleak scan --domain acme.io</div>
+              <div class="row"><span class="muted">▸</span> crawling dark-web markets… <span class="ok">done</span></div>
+              <div class="row"><span class="muted">▸</span> matching paste dumps… <span class="ok">done</span></div>
+              <div class="row"><span class="muted">▸</span> scanning public repos… <span class="ok">done</span></div>
+              <div class="row"><span class="warn">!</span> 3 leaked credentials found</div>
+              <div class="row"><span class="crit">✕</span> 1 exposed API key <span class="crit">[CRITICAL]</span></div>
+              <div class="row"><span class="muted">▸</span> generating report<span class="cursor"></span></div>
+            </div>
+          </div>
+          <div class="alert-card">
+            <span class="ico">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M12 9v4m0 4h.01M10.3 3.9L2 18a2 2 0 0 0 1.7 3h16.6A2 2 0 0 0 22 18L13.7 3.9a2 2 0 0 0-3.4 0z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+            <div>
+              <strong>Credential leak detected</strong>
+              <span>admin@acme.io found in BreachForum dump · just now</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================== LOGOS ========================== -->
+    <section class="logos">
+      <div class="container">
+        <p>Trusted by security teams at fast-moving companies</p>
+        <div class="logo-row">
+          <span>Northwind</span><span>Quantal</span><span>Vertex&nbsp;Pay</span>
+          <span>Helix</span><span>Orbital</span><span>Lumen&nbsp;Labs</span><span>Skybound</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================= FEATURES ========================= -->
+    <section class="section" id="features">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow">Capabilities</span>
+          <h2>Everything you need to stay ahead of leaks</h2>
+          <p>One platform to discover, prioritize, and remediate exposed data across the surface, deep, and dark web.</p>
+        </div>
+        <div class="feature-grid">
+          <div class="card reveal">
+            <div class="ic">
+              <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/><path d="M21 21l-4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            </div>
+            <h3>Dark web monitoring</h3>
+            <p>Continuous crawling of dark-web markets, forums, and Telegram channels where stolen data is traded.</p>
+          </div>
+          <div class="card violet reveal">
+            <div class="ic">
+              <svg viewBox="0 0 24 24" fill="none"><rect x="4" y="10" width="16" height="11" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="1.8"/></svg>
+            </div>
+            <h3>Credential leak detection</h3>
+            <p>Match employee and customer credentials against billions of breached records, paste sites, and combo lists.</p>
+          </div>
+          <div class="card mag reveal">
+            <div class="ic">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M8 6l-4 6 4 6M16 6l4 6-4 6M14 4l-4 16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <h3>Secret &amp; API key scanning</h3>
+            <p>Detect API tokens, private keys, and config files leaked across public repositories and gists.</p>
+          </div>
+          <div class="card reveal">
+            <div class="ic">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M12 2l8 3v6c0 5-3.4 9-8 11-4.6-2-8-6-8-11V5l8-3z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+            </div>
+            <h3>Attack surface insight</h3>
+            <p>Map exposed assets, subdomains, and shadow IT so nothing leaks from a system you forgot you had.</p>
+          </div>
+          <div class="card violet reveal">
+            <div class="ic">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M12 3v4m0 10v4m9-9h-4M7 12H3m13.5-6.5L14 8m-4 8l-2.5 2.5m9 0L14 16m-4-8L7.5 5.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            </div>
+            <h3>Real-time alerts</h3>
+            <p>Get notified the moment a match appears — via email, Slack, webhook, or your SIEM of choice.</p>
+          </div>
+          <div class="card mag reveal">
+            <div class="ic">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M4 19V5m0 14h16M8 16l3-4 3 2 4-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <h3>Risk scoring &amp; reports</h3>
+            <p>Every finding is enriched, deduplicated, and prioritized with a severity score and a clear remediation path.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================= HOW IT WORKS ========================= -->
+    <section class="section alt" id="how">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow">How it works</span>
+          <h2>From signal to remediation in three steps</h2>
+          <p>Connect your domains and assets once. DisLeak handles the monitoring, prioritization, and alerting for you.</p>
+        </div>
+        <div class="steps">
+          <div class="step reveal">
+            <div class="num">1</div>
+            <h3>Add your assets</h3>
+            <p>Enter your domains, brands, executive emails, and repositories. Setup takes minutes — no agents to install.</p>
+          </div>
+          <div class="step reveal">
+            <div class="num">2</div>
+            <h3>We monitor 24/7</h3>
+            <p>Our crawlers continuously scan the surface, deep, and dark web, matching new leaks against your footprint.</p>
+          </div>
+          <div class="step reveal">
+            <div class="num">3</div>
+            <h3>You get alerted &amp; act</h3>
+            <p>Prioritized findings land in your inbox, Slack, or SIEM with the context your team needs to respond fast.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================= SPLIT FEATURES ========================= -->
+    <section class="section">
+      <div class="container">
+        <div class="split reveal">
+          <div>
+            <span class="eyebrow">Live exposure feed</span>
+            <h2>A single dashboard for every exposure</h2>
+            <p>Stop stitching together spreadsheets and alerts from a dozen sources. DisLeak gives you one prioritized feed of every leak tied to your organization — deduplicated, scored, and ready to action.</p>
+            <ul class="check-list">
+              <li><svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg> Automatic deduplication across sources</li>
+              <li><svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg> Severity scoring with business context</li>
+              <li><svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg> One-click ticket and case creation</li>
+            </ul>
+            <a href="#cta" class="btn btn-primary">Explore the dashboard</a>
+          </div>
+          <div class="split-media">
+            <div class="panel">
+              <div class="panel-head"><span class="pulse"></span> Exposure feed · live</div>
+              <div class="leak-item">
+                <span class="sev high">High</span>
+                <div class="meta"><b>Leaked credential set</b><span>1,204 employee logins · BreachForum</span></div>
+                <span class="time">2m ago</span>
+              </div>
+              <div class="leak-item">
+                <span class="sev high">High</span>
+                <div class="meta"><b>AWS access key exposed</b><span>Public GitHub gist · repo: infra-scripts</span></div>
+                <span class="time">14m ago</span>
+              </div>
+              <div class="leak-item">
+                <span class="sev med">Med</span>
+                <div class="meta"><b>Customer PII in paste</b><span>Pastebin dump · 380 records</span></div>
+                <span class="time">1h ago</span>
+              </div>
+              <div class="leak-item">
+                <span class="sev low">Low</span>
+                <div class="meta"><b>Brand impersonation domain</b><span>acme-secure-login.com registered</span></div>
+                <span class="time">3h ago</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="split reverse reveal">
+          <div>
+            <span class="eyebrow">Integrations</span>
+            <h2>Plugs into the tools you already use</h2>
+            <p>Route findings straight into your existing workflow. Whether your team lives in Slack, Jira, or a full-blown SOC, DisLeak fits in without changing how you work.</p>
+            <ul class="check-list">
+              <li><svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg> Native Slack, Teams &amp; email alerts</li>
+              <li><svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg> Push to Jira, ServiceNow &amp; PagerDuty</li>
+              <li><svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg> REST API &amp; webhooks for everything else</li>
+            </ul>
+            <a href="#integrations" class="btn btn-primary">Browse integrations</a>
+          </div>
+          <div class="split-media">
+            <div class="panel">
+              <div class="panel-head"><span class="pulse"></span> Webhook delivery</div>
+              <div class="scanner" style="border-radius:0;box-shadow:none">
+                <div class="scanner-body">
+                  <div class="row"><span class="ok">POST</span> /v1/alerts <span class="muted">200 OK</span></div>
+                  <div class="row muted">{</div>
+                  <div class="row">&nbsp;&nbsp;"severity": <span class="crit">"critical"</span>,</div>
+                  <div class="row">&nbsp;&nbsp;"type": <span class="warn">"api_key_leak"</span>,</div>
+                  <div class="row">&nbsp;&nbsp;"source": "github.com/gist",</div>
+                  <div class="row">&nbsp;&nbsp;"asset": "acme.io"</div>
+                  <div class="row muted">}</div>
+                  <div class="row"><span class="ok">→</span> delivered to Slack #security</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================= STATS ========================= -->
+    <section class="section dark">
+      <div class="container">
+        <div class="stats">
+          <div class="stat reveal"><div class="big" data-count="18">18B+</div><div class="lbl">Breached records indexed</div></div>
+          <div class="stat reveal"><div class="big" data-count="40">40K+</div><div class="lbl">Dark-web sources tracked</div></div>
+          <div class="stat reveal"><div class="big">&lt;90s</div><div class="lbl">Average alert latency</div></div>
+          <div class="stat reveal"><div class="big">99.9%</div><div class="lbl">Monitoring uptime</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================= INTEGRATIONS ========================= -->
+    <section class="section alt integrations" id="integrations">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow">Connect everything</span>
+          <h2>Works with your security stack</h2>
+          <p>Out-of-the-box connectors for the platforms your team relies on every day.</p>
+        </div>
+        <div class="chips reveal">
+          <span class="chip"><span class="d"></span>Slack</span>
+          <span class="chip"><span class="d"></span>Microsoft Teams</span>
+          <span class="chip"><span class="d"></span>Jira</span>
+          <span class="chip"><span class="d"></span>ServiceNow</span>
+          <span class="chip"><span class="d"></span>PagerDuty</span>
+          <span class="chip"><span class="d"></span>Splunk</span>
+          <span class="chip"><span class="d"></span>Microsoft Sentinel</span>
+          <span class="chip"><span class="d"></span>Okta</span>
+          <span class="chip"><span class="d"></span>GitHub</span>
+          <span class="chip"><span class="d"></span>GitLab</span>
+          <span class="chip"><span class="d"></span>Webhooks</span>
+          <span class="chip"><span class="d"></span>REST API</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================= PRICING ========================= -->
+    <section class="section" id="pricing">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow">Pricing</span>
+          <h2>Simple plans that scale with you</h2>
+          <p>Start free, then upgrade when you're ready. Every plan includes continuous monitoring and real-time alerts.</p>
+        </div>
+        <div class="pricing-grid">
+          <div class="price-card reveal">
+            <h3>Starter</h3>
+            <p class="desc">For individuals and small teams getting started with exposure monitoring.</p>
+            <div class="amount"><span class="n">$0</span> <span class="per">/ month</span></div>
+            <ul>
+              <li><svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg> 1 domain monitored</li>
+              <li><svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg> Weekly dark-web scans</li>
+              <li><svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg> Email alerts</li>
+              <li><svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg> Community support</li>
+            </ul>
+            <a href="#cta" class="btn btn-ghost">Get started free</a>
+          </div>
+          <div class="price-card popular reveal">
+            <span class="tag-pop">Most popular</span>
+            <h3>Business</h3>
+            <p class="desc">For growing security teams that need continuous, real-time coverage.</p>
+            <div class="amount"><span class="n">$299</span> <span class="per">/ month</span></div>
+            <ul>
+              <li><svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg> Up to 25 domains</li>
+              <li><svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg> Real-time continuous monitoring</li>
+              <li><svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg> Slack, Teams &amp; webhook alerts</li>
+              <li><svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg> Secret &amp; API key scanning</li>
+              <li><svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg> Priority support</li>
+            </ul>
+            <a href="#cta" class="btn btn-grad">Start 14-day trial</a>
+          </div>
+          <div class="price-card reveal">
+            <h3>Enterprise</h3>
+            <p class="desc">For organizations that need scale, SSO, and a dedicated analyst.</p>
+            <div class="amount"><span class="n">Custom</span></div>
+            <ul>
+              <li><svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg> Unlimited domains &amp; assets</li>
+              <li><svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg> SSO, SAML &amp; audit logs</li>
+              <li><svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg> SIEM &amp; SOAR integrations</li>
+              <li><svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg> Dedicated threat analyst</li>
+              <li><svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg> 99.9% SLA</li>
+            </ul>
+            <a href="#cta" class="btn btn-ghost">Contact sales</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================= TESTIMONIALS ========================= -->
+    <section class="section alt">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow">Customer stories</span>
+          <h2>Security teams sleep better with DisLeak</h2>
+          <p>From startups to enterprises, teams rely on DisLeak to catch leaks the moment they surface.</p>
+        </div>
+        <div class="quote-grid">
+          <div class="quote reveal">
+            <div class="stars">★★★★★</div>
+            <p>"We found a leaked admin credential within an hour of onboarding. DisLeak paid for itself on day one."</p>
+            <div class="who"><span class="av">MR</span><div><b>Maya Rios</b><span>CISO, Northwind</span></div></div>
+          </div>
+          <div class="quote reveal">
+            <div class="stars">★★★★★</div>
+            <p>"The dark-web coverage is unmatched. Alerts are precise, deduplicated, and land right in our SOC queue."</p>
+            <div class="who"><span class="av">DT</span><div><b>Daniel Tran</b><span>Head of SecOps, Quantal</span></div></div>
+          </div>
+          <div class="quote reveal">
+            <div class="stars">★★★★★</div>
+            <p>"Setup took ten minutes and replaced three tools we were paying for. The API key scanning is a lifesaver."</p>
+            <div class="who"><span class="av">AK</span><div><b>Aisha Khan</b><span>VP Engineering, Vertex Pay</span></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================= FAQ ========================= -->
+    <section class="section" id="faq">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow">FAQ</span>
+          <h2>Questions, answered</h2>
+        </div>
+        <div class="faq reveal">
+          <div class="faq-item">
+            <button class="faq-q">How does DisLeak monitor the dark web? <span class="pm"><svg viewBox="0 0 24 24" width="22" height="22" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></span></button>
+            <div class="faq-a"><p>DisLeak operates a network of crawlers and human-curated sources across dark-web markets, hacking forums, Telegram channels, paste sites, and breach dumps. New data is continuously matched against your monitored assets and surfaced as prioritized findings.</p></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q">How fast will I be alerted to a leak? <span class="pm"><svg viewBox="0 0 24 24" width="22" height="22" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></span></button>
+            <div class="faq-a"><p>On Business and Enterprise plans, most matches are delivered in under 90 seconds of being detected. Alerts can reach you via email, Slack, Teams, webhook, or your SIEM.</p></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q">Is my data safe with DisLeak? <span class="pm"><svg viewBox="0 0 24 24" width="22" height="22" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></span></button>
+            <div class="faq-a"><p>Yes. DisLeak is built privacy-first: we only store the minimum needed to match your footprint, encrypt everything in transit and at rest, and are SOC 2 Type II aligned. We never expose raw leaked data to other customers.</p></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q">Do I need to install anything? <span class="pm"><svg viewBox="0 0 24 24" width="22" height="22" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></span></button>
+            <div class="faq-a"><p>No agents, no code changes. Add your domains, brands, and assets in the dashboard and monitoring starts immediately. Optional integrations connect with a few clicks.</p></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q">Can I try DisLeak for free? <span class="pm"><svg viewBox="0 0 24 24" width="22" height="22" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></span></button>
+            <div class="faq-a"><p>Absolutely. The Starter plan is free forever for one domain, and the Business plan includes a 14-day trial with no credit card required.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================= CTA ========================= -->
+    <div class="cta-wrap" id="cta">
+      <div class="container">
+        <div class="cta reveal">
+          <h2>Stop guessing what's exposed</h2>
+          <p>Run your first scan in under two minutes and see exactly where your data is leaking — for free.</p>
+          <div class="cta-actions">
+            <a href="#" class="btn btn-grad btn-lg">Start free scan
+              <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+            <a href="#" class="btn btn-light btn-lg">Book a demo</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ========================= FOOTER ========================= -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-top">
+        <div>
+          <a href="#top" class="brand">
+            <span class="logo-mark">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M12 2l8 3v6c0 5-3.4 9-8 11-4.6-2-8-6-8-11V5l8-3z" stroke="#fff" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+            DisLeak
+          </a>
+          <p class="footer-about">Continuous data-leak and dark-web monitoring that helps security teams find exposures before attackers do.</p>
+          <div class="footer-soc">
+            <a href="#" aria-label="X"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.9 2H22l-7 8 8.2 12h-6.4l-5-7.3L6 22H2.9l7.5-8.6L2.2 2h6.6l4.5 6.6L18.9 2zm-1.1 18h1.7L7.3 3.8H5.5L17.8 20z"/></svg></a>
+            <a href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.94 5a1.94 1.94 0 1 1-3.88 0 1.94 1.94 0 0 1 3.88 0zM3.3 8.4h3.3V21H3.3V8.4zM9.4 8.4h3.16v1.72h.05c.44-.83 1.5-1.7 3.1-1.7 3.32 0 3.93 2.18 3.93 5v7.58h-3.3v-6.72c0-1.6-.03-3.66-2.23-3.66-2.23 0-2.57 1.74-2.57 3.54V21H9.4V8.4z"/></svg></a>
+            <a href="#" aria-label="GitHub"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.15-1.1-1.46-1.1-1.46-.9-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.5 9.5 0 0 1 5 0c1.9-1.29 2.74-1.02 2.74-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.69-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2z"/></svg></a>
+          </div>
+        </div>
+        <div>
+          <h4>Product</h4>
+          <ul>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#how">How it works</a></li>
+            <li><a href="#integrations">Integrations</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Solutions</h4>
+          <ul>
+            <li><a href="#">Dark web monitoring</a></li>
+            <li><a href="#">Credential leaks</a></li>
+            <li><a href="#">Secret scanning</a></li>
+            <li><a href="#">Brand protection</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Company</h4>
+          <ul>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Blog</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Resources</h4>
+          <ul>
+            <li><a href="#">Documentation</a></li>
+            <li><a href="#">API reference</a></li>
+            <li><a href="#">Security</a></li>
+            <li><a href="#">Status</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 DisLeak, Inc. All rights reserved.</span>
+        <span><a href="#">Privacy</a> · <a href="#">Terms</a> · <a href="#">Cookies</a></span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
