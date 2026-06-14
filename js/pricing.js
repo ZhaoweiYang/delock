@@ -43,7 +43,7 @@
 
     // payment fields + button label
     $('cardFields').hidden = isFree;
-    $('payBtnLabel').textContent = isFree ? 'Create free account' : `Pay ${money(price)}`;
+    $('payBtnLabel').textContent = 'Continue';
   }
 
   /* --------------------------- Interactions -------------------------- */
