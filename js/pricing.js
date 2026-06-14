@@ -30,7 +30,7 @@
     $('sumTotal').textContent = money(price);
 
     if (isFree) {
-      $('sumNote').textContent = 'Free forever. Cancel anytime.';
+      $('sumNote').textContent = 'Cancel anytime.';
     } else if (cycle === 'annual') {
       $('sumNote').textContent = `Billed ${money(price)} yearly (≈ ${money(price / 12)}/mo). Cancel anytime.`;
     } else {
