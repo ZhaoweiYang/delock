@@ -604,6 +604,25 @@ section { scroll-margin-top: 96px; }
 @media (min-width: 720px) {
   .pricing-grid.duo { grid-template-columns: repeat(2, 1fr); max-width: 780px; margin: 0 auto; }
 }
+/* mobile: keep both plans side-by-side and fit the whole section in one screen */
+@media (max-width: 719px) {
+  #pricing.section { padding: 38px 0; }
+  #pricing .section-head { margin-bottom: 20px; }
+  #pricing .section-head h2 { font-size: 25px; margin-bottom: 8px; }
+  #pricing .section-head p { display: none; }
+  .pricing-grid.duo { grid-template-columns: 1fr 1fr; gap: 12px; }
+  .price-card { padding: 18px 14px; border-radius: 16px; }
+  .price-card .tag-pop { display: none; }
+  .price-card .desc { display: none; }
+  .price-card h3 { font-size: 17px; margin-bottom: 4px; }
+  .price-card .amount { margin: 8px 0 2px; }
+  .price-card .amount .n { font-size: 26px; }
+  .price-card .amount .per { font-size: 12px; }
+  .price-card ul { margin: 14px 0 16px; gap: 9px; }
+  .price-card li { font-size: 12.5px; gap: 7px; line-height: 1.35; }
+  .price-card li svg { flex: 0 0 15px; width: 15px; height: 15px; margin-top: 1px; }
+  .price-card .btn { padding: 11px; font-size: 13.5px; }
+}
 .price-card {
   background: var(--surface);
   border: 1px solid var(--line);
