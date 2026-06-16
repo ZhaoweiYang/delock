@@ -529,8 +529,6 @@
   background: var(--grad); color: #fff;
   font-size: 11px; font-weight: 700; display: inline-grid; place-items: center;
 }
-
-/* prominent bottom tab + badge */
 .ws-tab-vault { position: relative; }
 .ws-tab-badge {
   position: absolute; top: 4px; left: 50%; margin-left: 6px;
@@ -539,21 +537,19 @@
   display: grid; place-items: center;
 }
 
-.ws-vault {
-  position: fixed; inset: 0; z-index: 60;
-  display: flex; flex-direction: column;
-  background: var(--bg);
-}
-.ws-vault[hidden] { display: none; }
+/* Vault is an inline view inside the grid (not an overlay) */
+.ws-vault { display: none; flex-direction: column; min-width: 0; }
+.ws-grid[data-view="vault"] .ws-vault { display: flex; grid-column: 1 / -1; min-height: calc(100vh - 64px); }
+.ws-grid[data-view="vault"] .ws-algos,
+.ws-grid[data-view="vault"] .ws-main,
+.ws-grid[data-view="vault"] .ws-params { display: none; }
+
 .ws-vault-head {
   display: flex; align-items: center; gap: 14px;
-  padding: 0 18px; padding-top: env(safe-area-inset-top);
-  height: calc(64px + env(safe-area-inset-top));
-  border-bottom: 1px solid var(--line);
-  background: rgba(12,10,18,.8); backdrop-filter: blur(12px);
+  padding: 16px 24px; border-bottom: 1px solid var(--line);
 }
 .ws-vault-titlewrap { display: flex; align-items: baseline; gap: 10px; }
-.ws-vault-titlewrap h2 { font-size: 19px; margin: 0; }
+.ws-vault-titlewrap h2 { font-size: 20px; margin: 0; }
 .ws-vault-count { font-size: 13px; color: var(--muted); }
 .ws-vault-close {
   width: 40px; height: 40px; border-radius: 11px; flex: 0 0 auto;
@@ -572,8 +568,7 @@
 
 .ws-vault-tools {
   display: flex; gap: 12px; flex-wrap: wrap; align-items: center;
-  padding: 16px 18px; border-bottom: 1px solid var(--line);
-  max-width: 1100px; width: 100%; margin: 0 auto;
+  padding: 16px 24px; border-bottom: 1px solid var(--line);
 }
 .ws-vault-search {
   display: flex; align-items: center; gap: 9px; flex: 1 1 240px;
@@ -595,13 +590,15 @@
 }
 .ws-vault-filters button.active { background: var(--grad); color: #fff; border-color: transparent; box-shadow: var(--glow); }
 
+/* preview gallery — two columns */
 .ws-vault-body {
   flex: 1; overflow-y: auto;
-  padding: 18px;
-  padding-bottom: calc(28px + env(safe-area-inset-bottom));
-  max-width: 1100px; width: 100%; margin: 0 auto;
-  display: grid; gap: 14px; align-content: start;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  padding: 18px 24px;
+  display: grid; gap: 16px; align-content: start;
+  grid-template-columns: repeat(2, 1fr);
+}
+@media (min-width: 1000px) {
+  .ws-vault-body { grid-template-columns: repeat(3, 1fr); }
 }
 .vault-empty {
   grid-column: 1 / -1;
@@ -610,43 +607,79 @@
 
 .vault-card {
   background: var(--surface); border: 1px solid var(--line);
-  border-radius: 16px; padding: 16px 18px;
-  display: flex; flex-direction: column; gap: 10px;
+  border-radius: 16px; overflow: hidden;
+  display: flex; flex-direction: column;
+  transition: border-color .15s, transform .1s;
 }
-.vault-card-top { display: flex; align-items: center; gap: 9px; }
-.vault-badge {
-  font-family: var(--font-display); font-size: 11px; font-weight: 700;
+.vault-card:hover { border-color: var(--line-2); }
+
+/* thumbnail / preview area */
+.vault-thumb {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  background: linear-gradient(160deg, #14121d, #0e0c16);
+  border-bottom: 1px solid var(--line);
+  padding: 14px; overflow: hidden;
+  display: flex; flex-direction: column;
+}
+.vault-thumb .vault-badge {
+  position: absolute; top: 10px; left: 10px; z-index: 1;
+  font-family: var(--font-display); font-size: 10px; font-weight: 700;
   text-transform: uppercase; letter-spacing: .04em;
-  padding: 3px 9px; border-radius: 7px;
+  padding: 3px 8px; border-radius: 6px;
 }
-.vault-badge.decrypt { background: rgba(255,90,31,.16); color: #ffb48c; }
-.vault-badge.decode  { background: rgba(140,100,255,.16); color: #b9a3ff; }
-.vault-badge.encrypt { background: rgba(54,210,126,.16); color: #4fdc92; }
-.vault-badge.encode  { background: rgba(91,140,255,.18); color: #9db8ff; }
-.vault-badge.hash    { background: rgba(255,255,255,.08); color: #c9c8da; }
-.vault-file-ico { width: 15px; height: 15px; color: var(--muted); }
-.vault-algo { font-family: "JetBrains Mono", monospace; font-size: 12.5px; color: #d4d3e0; font-weight: 600; }
-.vault-date { margin-left: auto; font-size: 11.5px; color: var(--muted); white-space: nowrap; }
-.vault-card-title { font-family: var(--font-display); font-weight: 600; font-size: 15px; color: #fff; word-break: break-word; }
-.vault-card-preview {
-  font-family: "JetBrains Mono", monospace; font-size: 12.5px; color: var(--muted);
-  word-break: break-all; line-height: 1.5;
-  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+.vault-badge.decrypt { background: rgba(255,90,31,.18); color: #ffb48c; }
+.vault-badge.decode  { background: rgba(140,100,255,.2); color: #c1acff; }
+.vault-badge.encrypt { background: rgba(54,210,126,.18); color: #5fe39c; }
+.vault-badge.encode  { background: rgba(91,140,255,.22); color: #a8c0ff; }
+.vault-badge.hash    { background: rgba(255,255,255,.1); color: #d4d3e0; }
+
+/* text preview (document look) */
+.vault-thumb-text {
+  margin-top: 22px;
+  font-family: "JetBrains Mono", monospace; font-size: 11px; line-height: 1.55;
+  color: #b9b8cc; word-break: break-all;
+  display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; overflow: hidden;
 }
+/* website preview */
+.vault-thumb-web { margin: auto; text-align: center; color: #cfe3ff; }
+.vault-thumb-web svg { width: 34px; height: 34px; color: #6ea8ff; margin: 0 auto 10px; }
+.vault-thumb-web .host { font-family: "JetBrains Mono", monospace; font-size: 12.5px; color: #e3e2ee; word-break: break-all; }
+/* file preview */
+.vault-thumb-file { margin: auto; text-align: center; color: var(--muted); }
+.vault-thumb-file svg { width: 38px; height: 38px; color: var(--orange); margin: 0 auto 8px; }
+.vault-thumb-file .fname { font-size: 12.5px; color: #d4d3e0; word-break: break-all; }
+
+.vault-card-body { padding: 13px 15px 15px; display: flex; flex-direction: column; gap: 8px; }
+.vault-card-title { font-family: var(--font-display); font-weight: 600; font-size: 14.5px; color: #fff; word-break: break-word;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.vault-card-meta { display: flex; align-items: center; gap: 8px; font-size: 11.5px; }
+.vault-card-meta .vault-algo { font-family: "JetBrains Mono", monospace; color: #d4d3e0; font-weight: 600; }
+.vault-card-meta .vault-date { margin-left: auto; color: var(--muted); white-space: nowrap; }
 .vault-card-actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 2px; }
 .vault-card-actions button {
-  font-family: var(--font-display); font-weight: 600; font-size: 12.5px;
+  font-family: var(--font-display); font-weight: 600; font-size: 12px;
   color: #d4d3e0; background: rgba(255,255,255,.05);
-  border: 1px solid var(--line); border-radius: 9px;
-  padding: 7px 11px; cursor: pointer; transition: background .15s, color .15s, border-color .15s;
+  border: 1px solid var(--line); border-radius: 8px;
+  padding: 6px 10px; cursor: pointer; transition: background .15s, color .15s, border-color .15s;
 }
 .vault-card-actions button:hover { background: var(--surface-2); border-color: var(--line-2); }
 .vault-card-actions button[data-act="open"]:hover { color: #ffb48c; border-color: rgba(255,90,31,.4); }
 .vault-card-actions button[data-act="delete"]:hover { color: #ff8773; border-color: rgba(255,90,50,.4); }
 
 @media (max-width: 760px) {
-  .ws-vault-btn { display: none; }   /* mobile uses the bottom Vault tab */
-  .ws-vault-body { grid-template-columns: 1fr; }
+  .ws-vault-btn { display: none; }            /* mobile uses the bottom Vault tab */
+  .ws-vault-close { display: none; }          /* tabs handle navigation */
+  .ws-vault-head, .ws-vault-tools { padding-left: 16px; padding-right: 16px; }
+  .ws-vault-body {
+    padding: 16px;
+    padding-bottom: calc(92px + env(safe-area-inset-bottom));
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .ws-grid[data-view="vault"] .ws-vault {
+    min-height: calc(100vh - 60px - env(safe-area-inset-top));
+    min-height: calc(100dvh - 60px - env(safe-area-inset-top));
+  }
+  .vault-card-actions button { font-size: 11.5px; padding: 6px 9px; }
 }
-
 .ws-vault-badge[hidden], .ws-tab-badge[hidden] { display: none; }

@@ -172,10 +172,43 @@
         Everything runs locally — your keys and plaintext never leave your browser.
       </div>
     </aside>
+
+    <!-- ----------------- VAULT (inline view) ----------------- -->
+    <section class="ws-vault" id="vaultPanel">
+      <div class="ws-vault-head">
+        <button class="ws-vault-close" id="vaultClose" type="button" aria-label="Back to console">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M19 12H5M11 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="ws-vault-titlewrap">
+          <h2>Vault</h2>
+          <span class="ws-vault-count" id="vaultCount">0 items</span>
+        </div>
+        <button class="ws-vault-clear" id="vaultClear" type="button">Clear all</button>
+      </div>
+      <div class="ws-vault-tools">
+        <label class="ws-vault-search">
+          <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/><path d="M21 21l-4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          <input id="vaultSearch" type="text" placeholder="Search your vault…" autocomplete="off" spellcheck="false" />
+        </label>
+        <div class="ws-vault-filters" id="vaultFilters">
+          <button class="active" data-filter="all" type="button">All</button>
+          <button data-filter="decrypt" type="button">Unlocked</button>
+          <button data-filter="encrypt" type="button">Encrypted</button>
+          <button data-filter="file" type="button">Files</button>
+          <button data-filter="hash" type="button">Hashes</button>
+        </div>
+      </div>
+      <div class="ws-vault-body" id="vaultList"></div>
+    </section>
   </div>
 
   <!-- ===================== MOBILE TAB BAR ===================== -->
   <nav class="ws-tabbar" id="wsTabbar">
+    <button data-view="vault" type="button" class="ws-tab-vault">
+      <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="16" rx="2.5" stroke="currentColor" stroke-width="1.8"/><path d="M3 9h18" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="14.5" r="2" stroke="currentColor" stroke-width="1.8"/></svg>
+      <span>Vault</span>
+      <span class="ws-tab-badge" id="vaultBadgeTab" hidden>0</span>
+    </button>
     <button data-view="encrypt" class="active" type="button">
       <svg viewBox="0 0 24 24" fill="none"><path d="M8 11V8a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><rect x="5" y="11" width="14" height="9" rx="2" stroke="currentColor" stroke-width="1.8"/></svg>
       <span>Encrypt</span>
@@ -184,44 +217,11 @@
       <svg viewBox="0 0 24 24" fill="none"><path d="M8 11V7.5A4 4 0 0 1 15.5 5.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><rect x="5" y="11" width="14" height="9" rx="2" stroke="currentColor" stroke-width="1.8"/></svg>
       <span>Decrypt</span>
     </button>
-    <button id="vaultTab" type="button" class="ws-tab-vault">
-      <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="16" rx="2.5" stroke="currentColor" stroke-width="1.8"/><path d="M3 9h18" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="14.5" r="2" stroke="currentColor" stroke-width="1.8"/></svg>
-      <span>Vault</span>
-      <span class="ws-tab-badge" id="vaultBadgeTab" hidden>0</span>
-    </button>
     <button data-view="more" type="button">
       <svg viewBox="0 0 24 24" fill="none"><circle cx="5" cy="12" r="1.7" fill="currentColor"/><circle cx="12" cy="12" r="1.7" fill="currentColor"/><circle cx="19" cy="12" r="1.7" fill="currentColor"/></svg>
       <span>More</span>
     </button>
   </nav>
-
-  <!-- ===================== VAULT (files & resources) ===================== -->
-  <div class="ws-vault" id="vaultPanel" hidden>
-    <div class="ws-vault-head">
-      <button class="ws-vault-close" id="vaultClose" type="button" aria-label="Close">
-        <svg viewBox="0 0 24 24" fill="none"><path d="M19 12H5M11 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </button>
-      <div class="ws-vault-titlewrap">
-        <h2>Vault</h2>
-        <span class="ws-vault-count" id="vaultCount">0 items</span>
-      </div>
-      <button class="ws-vault-clear" id="vaultClear" type="button">Clear all</button>
-    </div>
-    <div class="ws-vault-tools">
-      <label class="ws-vault-search">
-        <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/><path d="M21 21l-4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-        <input id="vaultSearch" type="text" placeholder="Search your vault…" autocomplete="off" spellcheck="false" />
-      </label>
-      <div class="ws-vault-filters" id="vaultFilters">
-        <button class="active" data-filter="all" type="button">All</button>
-        <button data-filter="decrypt" type="button">Unlocked</button>
-        <button data-filter="encrypt" type="button">Encrypted</button>
-        <button data-filter="file" type="button">Files</button>
-        <button data-filter="hash" type="button">Hashes</button>
-      </div>
-    </div>
-    <div class="ws-vault-body" id="vaultList"></div>
-  </div>
 
   <div class="ws-toast" id="toast"></div>
 

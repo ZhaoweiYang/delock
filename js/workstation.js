@@ -267,8 +267,8 @@
     updateTabState();
   }
 
-  /* mobile bottom-tab view switching (Encrypt / Decrypt / More) */
-  const VIEW_TITLES = { encrypt: 'Encrypt', decrypt: 'Decrypt', more: 'More' };
+  /* bottom-tab / view switching (Vault / Encrypt / Decrypt / More) */
+  const VIEW_TITLES = { vault: 'Vault', encrypt: 'Encrypt', decrypt: 'Decrypt', more: 'More' };
   function setView(v) {
     if (!gridEl) return;
     if (v === 'decrypt' && !current.reversible) v = 'encrypt';   // one-way algos can't decrypt
@@ -277,7 +277,8 @@
       b.classList.toggle('active', b.dataset.view === v));
     const title = $('viewTitle');
     if (title) title.textContent = VIEW_TITLES[v] || 'Encrypt';
-    if (v === 'encrypt') setMode('encrypt');
+    if (v === 'vault') renderVault();
+    else if (v === 'encrypt') setMode('encrypt');
     else if (v === 'decrypt') setMode('decrypt');
   }
   function updateTabState() {
@@ -528,7 +529,20 @@ Content-Type: application/json
       return okF && okQ;
     });
   }
-  const fileIcoSvg = '<svg class="vault-file-ico" viewBox="0 0 24 24" fill="none"><path d="M7 3h7l5 5v13H7z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M14 3v5h5" stroke="currentColor" stroke-width="1.7"/></svg>';
+  const GLOBE_SVG = '<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.7"/><path d="M3 12h18M12 3c2.5 2.5 2.5 15 0 18M12 3c-2.5 2.5-2.5 15 0 18" stroke="currentColor" stroke-width="1.7"/></svg>';
+  const FILE_SVG = '<svg viewBox="0 0 24 24" fill="none"><path d="M7 3h7l5 5v13H7z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M14 3v5h5" stroke="currentColor" stroke-width="1.7"/></svg>';
+  const isUrl = (s) => /^https?:\/\/[^\s]+$/i.test((s || '').trim());
+  function hostOf(u) { try { return new URL(u.trim()).hostname; } catch (e) { return u; } }
+  function thumbHtml(e) {
+    if (e.source === 'file') {
+      return `<div class="vault-thumb-file">${FILE_SVG}<div class="fname">${escapeHtml(e.input || 'File')}</div></div>`;
+    }
+    const out = e.output || '';
+    if (isUrl(out)) {
+      return `<div class="vault-thumb-web">${GLOBE_SVG}<div class="host">${escapeHtml(hostOf(out))}</div></div>`;
+    }
+    return `<div class="vault-thumb-text">${escapeHtml(out.slice(0, 280)) || '(empty)'}</div>`;
+  }
   function renderVault() {
     const box = $('vaultList');
     const items = vaultFiltered();
@@ -541,28 +555,25 @@ Content-Type: application/json
     box.innerHTML = items.map((e) => {
       const k = KIND[e.kind] || { label: e.kind, cls: 'hash' };
       const t = new Date(e.ts).toLocaleString();
-      const prev = escapeHtml((e.output || '').length > 180 ? e.output.slice(0, 180) + '…' : (e.output || '')) || '(empty)';
       return `<div class="vault-card" data-id="${e.id}">
-        <div class="vault-card-top">
+        <div class="vault-thumb">
           <span class="vault-badge ${k.cls}">${k.label}</span>
-          ${e.source === 'file' ? fileIcoSvg : ''}
-          <span class="vault-algo">${escapeHtml(e.algo)}</span>
-          <span class="vault-date">${t}</span>
+          ${thumbHtml(e)}
         </div>
-        <div class="vault-card-title">${escapeHtml(e.title)}</div>
-        <div class="vault-card-preview">${prev}</div>
-        <div class="vault-card-actions">
-          <button data-act="open">Open</button>
-          <button data-act="copy">Copy</button>
-          <button data-act="download">Download</button>
-          <button data-act="rename">Rename</button>
-          <button data-act="delete">Delete</button>
+        <div class="vault-card-body">
+          <div class="vault-card-title">${escapeHtml(e.title)}</div>
+          <div class="vault-card-meta"><span class="vault-algo">${escapeHtml(e.algo)}</span><span class="vault-date">${t}</span></div>
+          <div class="vault-card-actions">
+            <button data-act="open">Open</button>
+            <button data-act="copy">Copy</button>
+            <button data-act="download">Download</button>
+            <button data-act="rename">Rename</button>
+            <button data-act="delete">Delete</button>
+          </div>
         </div>
       </div>`;
     }).join('');
   }
-  function openVault() { renderVault(); $('vaultPanel').hidden = false; }
-  function closeVault() { $('vaultPanel').hidden = true; }
   function clearVault() {
     if (!vault.length) return;
     if (!confirm('Clear all items from your vault? This cannot be undone.')) return;
@@ -585,7 +596,6 @@ Content-Type: application/json
       if (name && name.trim()) { e.title = name.trim().slice(0, 80); saveVault(); renderVault(); }
     } else if (act === 'open') {
       if (e.source !== 'text') { toast('File items — use Download'); return; }
-      closeVault();
       selectAlgo(e.algoId);
       setFormat(e.fmt || 'base64');
       setInputTab('text');
@@ -613,10 +623,10 @@ Content-Type: application/json
     // mobile algorithm selector (collapsible)
     $('algosToggle').addEventListener('click', () => $('wsAlgos').classList.toggle('open'));
 
-    // vault: entry points (desktop button + mobile tab) and controls
-    $('vaultTab').addEventListener('click', openVault);
-    $('vaultBtn').addEventListener('click', openVault);
-    $('vaultClose').addEventListener('click', closeVault);
+    // vault: entry points (desktop button) + controls; the mobile Vault tab
+    // is a data-view button handled by the tab handler above
+    $('vaultBtn').addEventListener('click', () => setView('vault'));
+    $('vaultClose').addEventListener('click', () => setView('encrypt'));
     $('vaultClear').addEventListener('click', clearVault);
     $('vaultSearch').addEventListener('input', (e) => { vaultQuery = e.target.value; renderVault(); });
     document.querySelectorAll('#vaultFilters button').forEach((b) => {
