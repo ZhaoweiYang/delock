@@ -642,7 +642,7 @@ Content-Type: application/json
   const CREDIT_RATE = 0.10;        // $ per credit (10 credits = $1)
   const PREMIUM_OFF = 0.9;         // Premium: 10% off
   const PACKS = [100, 500, 1000];
-  let account = { id: '', plan: 'basic', credits: 10 };
+  let account = { id: '', plan: 'basic', credits: 10, linked: false, email: '' };
   let autosave = true;
 
   function genId() { return 'DLK-' + Math.random().toString(36).slice(2, 8).toUpperCase(); }
@@ -656,7 +656,14 @@ Content-Type: application/json
 
   function renderMe() {
     const info = PLAN_INFO[account.plan] || PLAN_INFO.basic;
+    const linked = !!account.linked;
+    $('meName').textContent = linked ? (account.email || 'Google account') : 'Guest account';
     $('meSubline').textContent = info.name + ' plan · ' + account.id;
+    $('meAvatar').textContent = linked && account.email ? account.email[0].toUpperCase() : 'D';
+    $('meGoogle').hidden = linked;
+    $('meAccountNote').hidden = linked;
+    $('meLinked').hidden = !linked;
+    $('meGoogleChip').hidden = !linked;
     $('meCredits').textContent = (account.credits || 0).toLocaleString();
     const per10 = (10 * CREDIT_RATE * (account.plan === 'premium' ? PREMIUM_OFF : 1)).toFixed(2);
     $('meRate').innerHTML = account.plan === 'premium'
@@ -695,10 +702,22 @@ Content-Type: application/json
     const subject = encodeURIComponent('Delock support request');
     const body = encodeURIComponent(
       'Account ID: ' + account.id + '\n' +
+      (account.linked && account.email ? 'Email: ' + account.email + '\n' : 'Account: temporary (not signed in)\n') +
       'Plan: ' + ((PLAN_INFO[account.plan] || {}).name || 'Basic') + '\n' +
       'Credits: ' + (account.credits || 0) + '\n\n' +
       'Please describe your issue below:\n');
     window.location.href = 'mailto:support@delock.app?subject=' + subject + '&body=' + body;
+  }
+  function linkGoogle() {
+    const email = prompt('Sign in with Google\n\nEnter your Google email to link this account:', 'you@gmail.com');
+    if (!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email.trim())) return;
+    account.linked = true; account.email = email.trim();
+    saveAccount(); renderMe(); toast('Signed in with Google');
+  }
+  function unlinkGoogle() {
+    if (!confirm('Disconnect your Google account? Your temporary account, plan and credits stay on this device.')) return;
+    account.linked = false; account.email = '';
+    saveAccount(); renderMe(); toast('Google disconnected');
   }
 
   /* ----------------------------- Wiring ----------------------------- */
@@ -724,6 +743,8 @@ Content-Type: application/json
     $('meLogout').addEventListener('click', () => { if (confirm('Log out of Delock?')) location.href = 'index.html'; });
     $('meClearVault').addEventListener('click', () => { clearVault(); toast('Vault cleared'); });
     $('meSupport').addEventListener('click', openSupport);
+    $('meGoogle').addEventListener('click', linkGoogle);
+    $('meUnlink').addEventListener('click', unlinkGoogle);
     $('autosaveToggle').checked = autosave;
     $('autosaveToggle').addEventListener('change', (e) => {
       autosave = e.target.checked;
