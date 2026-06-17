@@ -474,7 +474,30 @@ Content-Type: application/json
     hash:    { label: 'Hash',     cls: 'hash' }
   };
 
-  function loadVault() { try { vault = JSON.parse(localStorage.getItem(VKEY) || '[]'); } catch (e) { vault = []; } }
+  // sample "unlocked products" so the vault shows examples on first visit
+  const SAMPLE_ITEMS = [
+    { id: 'sample-web', ts: Date.now() - 3600e3, kind: 'decrypt', algo: 'AES-GCM', fmt: 'base64', source: 'text',
+      title: 'Premium report · 2026 Threat Landscape',
+      input: 'k3F9vR2bQ8w1Lp7m4nX…',
+      output: 'https://reports.delock.app/2026-threat-landscape' },
+    { id: 'sample-file', ts: Date.now() - 2 * 3600e3, kind: 'decrypt', algo: 'AES-CBC', fmt: 'base64', source: 'file',
+      title: 'confidential-keys.pdf',
+      input: 'confidential-keys.pdf',
+      output: 'Decrypted 248 KB — download ready.' },
+    { id: 'sample-text', ts: Date.now() - 5 * 3600e3, kind: 'decode', algo: 'Base64', fmt: 'base64', source: 'text',
+      title: 'Unlocked note',
+      input: 'VGhpcyBpcyBhIHNhbXBsZSB1bmxvY2tlZCBub3Rl',
+      output: 'This is a sample unlocked note. Your decrypted text, files and links all appear here in the Vault.' }
+  ];
+  function loadVault() {
+    try { vault = JSON.parse(localStorage.getItem(VKEY) || '[]'); } catch (e) { vault = []; }
+    // seed example items once, so new visitors see what unlocked content looks like
+    if (!vault.length && !localStorage.getItem('delock.vault.seeded')) {
+      vault = SAMPLE_ITEMS.slice();
+      saveVault();
+      try { localStorage.setItem('delock.vault.seeded', '1'); } catch (e) { /* ignore */ }
+    }
+  }
   function saveVault() { try { localStorage.setItem(VKEY, JSON.stringify(vault.slice(0, 200))); } catch (e) { /* quota */ } }
   function kindOf() {
     if (current.type === 'hash' || current.type === 'md5') return 'hash';
