@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0b0910" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>Payment successful — Delock</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/success.css" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%23ff5a1f'/%3E%3Cpath d='M11 14v-2a5 5 0 0 1 10 0v2m-11 0h12v9H10z' fill='none' stroke='white' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E" />
+</head>
+<body class="success-body">
+  <main class="success">
+    <div class="success-top">
+      <span class="success-check">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </span>
+      <h1 id="successHead">Payment successful</h1>
+      <p id="successSub">Your membership is active.</p>
+    </div>
+
+    <div class="success-mid">
+      <h2>Download the app</h2>
+      <p>to view your unlocked content</p>
+      <div class="success-arrow" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 4v15M6 13l6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+  </main>
+
+  <!-- App download banner (smart-banner style) -->
+  <a class="app-banner" href="#" id="appBanner">
+    <span class="app-ico">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M8 11V8a4 4 0 0 1 8 0v3" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/><rect x="5" y="11" width="14" height="9" rx="2" stroke="#fff" stroke-width="1.8"/></svg>
+    </span>
+    <span class="app-meta">
+      <b>Delock</b>
+      <span>Encryption Toolkit · Free</span>
+    </span>
+    <span class="app-get">GET</span>
+  </a>
+
+  <script>
+    (function () {
+      var p = new URLSearchParams(location.search);
+      if (p.get('trial') === '1') {
+        document.getElementById('successHead').textContent = 'Your 3-day trial is active';
+        document.getElementById('successSub').textContent = "You'll be charged $0.01 for the trial.";
+      } else {
+        var plan = (p.get('plan') || '').replace(/^\w/, function (c) { return c.toUpperCase(); });
+        if (plan) document.getElementById('successSub').textContent = 'Your ' + plan + ' membership is active.';
+      }
+    })();
+  </script>
+</body>
+</html>

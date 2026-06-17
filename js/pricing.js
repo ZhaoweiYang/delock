@@ -50,11 +50,7 @@
   }
 
   function onContinue() {
-    $('payBtn').hidden = true;
-    $('paySuccess').hidden = false;
-    $('successTitle').textContent = "You're all set";
-    $('successText').textContent = `Welcome to Delock ${PLANS[plan].name} (${cycle === 'annual' ? 'annual' : 'monthly'}).`;
-    $('paySuccess').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    location.href = 'success.html?plan=' + plan + '&cycle=' + cycle;
   }
 
   /* ------------------------------ Init ------------------------------- */
@@ -77,14 +73,7 @@
     $('trialClose').addEventListener('click', hideTrial);
     $('trialBackdrop').addEventListener('click', hideTrial);
     $('trialLeave').addEventListener('click', () => { location.href = (back && back.getAttribute('href')) || 'index.html'; });
-    $('trialAccept').addEventListener('click', () => {
-      hideTrial();
-      $('payBtn').hidden = true;
-      $('paySuccess').hidden = false;
-      $('successTitle').textContent = 'Your 3-day trial is active';
-      $('successText').textContent = 'Enjoy 1 free unlock. You’ll be charged $0.01 for the 3-day trial.';
-      $('paySuccess').scrollIntoView({ behavior: 'smooth', block: 'center' });
-    });
+    $('trialAccept').addEventListener('click', () => { location.href = 'success.html?trial=1'; });
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !trial.hidden) hideTrial(); });
 
     render();

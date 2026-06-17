@@ -1,0 +1,73 @@
+/* =====================================================================
+   Delock — post-payment success / download-app page
+   ===================================================================== */
+.success-body {
+  min-height: 100vh;
+  background:
+    radial-gradient(900px 520px at 50% -10%, rgba(255, 90, 31, .14), transparent 60%),
+    var(--bg);
+}
+
+.success {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: clamp(40px, 12vh, 110px) 24px calc(150px + env(safe-area-inset-bottom));
+  gap: 6vh;
+}
+
+/* top — payment successful */
+.success-top { display: flex; flex-direction: column; align-items: center; }
+.success-check {
+  width: 64px; height: 64px; border-radius: 50%;
+  display: grid; place-items: center; margin-bottom: 20px;
+  background: rgba(54, 210, 126, .15); color: #4fdc92;
+  box-shadow: 0 0 0 8px rgba(54, 210, 126, .06);
+}
+.success-check svg { width: 32px; height: 32px; }
+.success-top h1 { font-size: clamp(26px, 5vw, 36px); margin: 0 0 8px; }
+.success-top p { color: var(--muted); font-size: 15px; margin: 0; }
+
+/* middle — download prompt */
+.success-mid { display: flex; flex-direction: column; align-items: center; margin-top: 2vh; }
+.success-mid h2 {
+  font-size: clamp(22px, 4.4vw, 30px); margin: 0 0 8px;
+  background: var(--grad); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+}
+.success-mid p { color: #d4d3e0; font-size: 16px; margin: 0; }
+.success-arrow { margin-top: 30px; color: var(--orange); animation: arrowBounce 1.6s ease-in-out infinite; }
+.success-arrow svg { width: 30px; height: 30px; }
+@keyframes arrowBounce { 0%, 100% { transform: translateY(0); opacity: .7; } 50% { transform: translateY(10px); opacity: 1; } }
+
+/* bottom — app download banner */
+.app-banner {
+  position: fixed; left: 14px; right: 14px;
+  bottom: calc(16px + env(safe-area-inset-bottom));
+  max-width: 480px; margin: 0 auto;
+  display: flex; align-items: center; gap: 14px;
+  background: #16131f; border: 1px solid var(--line-2);
+  border-radius: 18px; padding: 12px 14px;
+  box-shadow: var(--shadow-lg);
+  animation: bannerUp .35s ease both;
+}
+@keyframes bannerUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+.app-ico {
+  width: 52px; height: 52px; border-radius: 13px; flex: 0 0 auto;
+  background: var(--grad); display: grid; place-items: center;
+  box-shadow: var(--glow);
+}
+.app-ico svg { width: 28px; height: 28px; }
+.app-meta { display: flex; flex-direction: column; min-width: 0; }
+.app-meta b { font-family: var(--font-display); font-size: 16px; color: #fff; }
+.app-meta span { font-size: 13px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.app-get {
+  margin-left: auto; flex: 0 0 auto;
+  font-family: var(--font-display); font-weight: 700; font-size: 14px;
+  color: #fff; background: var(--grad);
+  padding: 9px 22px; border-radius: 999px;
+  box-shadow: 0 8px 20px rgba(255, 90, 31, .4);
+}
+.app-banner:active { transform: scale(.99); }
