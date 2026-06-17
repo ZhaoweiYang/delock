@@ -52,8 +52,19 @@
         document.getElementById('successHead').textContent = 'Your 3-day trial is active';
         document.getElementById('successSub').textContent = "You'll be charged $0.01 for the trial.";
       } else {
-        var plan = (p.get('plan') || '').replace(/^\w/, function (c) { return c.toUpperCase(); });
-        if (plan) document.getElementById('successSub').textContent = 'Your ' + plan + ' membership is active.';
+        var planId = (p.get('plan') || '').toLowerCase();
+        var label = planId.replace(/^\w/, function (c) { return c.toUpperCase(); });
+        if (label) document.getElementById('successSub').textContent = 'Your ' + label + ' membership is active.';
+        // apply the membership + gifted monthly credits to the local account
+        if (planId === 'basic' || planId === 'premium') {
+          try {
+            var acc = JSON.parse(localStorage.getItem('delock.account') || '{}');
+            if (!acc.id) acc.id = 'DLK-' + Math.random().toString(36).slice(2, 8).toUpperCase();
+            acc.plan = planId;
+            acc.credits = (acc.credits || 0) + (planId === 'premium' ? 1000 : 10);
+            localStorage.setItem('delock.account', JSON.stringify(acc));
+          } catch (e) { /* ignore */ }
+        }
       }
     })();
   </script>

@@ -268,7 +268,7 @@
   }
 
   /* bottom-tab / view switching (Vault / Encrypt / Decrypt / More) */
-  const VIEW_TITLES = { vault: 'Vault', encrypt: 'Encrypt', decrypt: 'Decrypt', more: 'More' };
+  const VIEW_TITLES = { vault: 'Vault', encrypt: 'Encrypt', decrypt: 'Decrypt', more: 'More', me: 'Me' };
   function setView(v) {
     if (!gridEl) return;
     if (v === 'decrypt' && !current.reversible) v = 'encrypt';   // one-way algos can't decrypt
@@ -278,6 +278,7 @@
     const title = $('viewTitle');
     if (title) title.textContent = VIEW_TITLES[v] || 'Encrypt';
     if (v === 'vault') renderVault();
+    else if (v === 'me') renderMe();
     else if (v === 'encrypt') setMode('encrypt');
     else if (v === 'decrypt') setMode('decrypt');
   }
@@ -519,6 +520,7 @@ Content-Type: application/json
     updateVaultCount();
   }
   function recordItem() {
+    if (!autosave) return;   // honor the Me › Settings toggle
     saveItem({
       kind: kindOf(),
       algoId: current.id, algo: current.name, fmt: format,
@@ -631,11 +633,81 @@ Content-Type: application/json
     }
   }
 
+  /* ===================== Me / account / membership ================== */
+  const AKEY = 'delock.account';
+  const PLAN_INFO = {
+    basic:   { name: 'Basic',   fee: '$1 / mo',    monthly: 10 },
+    premium: { name: 'Premium', fee: '$19.9 / mo', monthly: 1000 }
+  };
+  const CREDIT_RATE = 0.10;        // $ per credit (10 credits = $1)
+  const PREMIUM_OFF = 0.9;         // Premium: 10% off
+  const PACKS = [100, 500, 1000];
+  let account = { id: '', plan: 'basic', credits: 10 };
+  let autosave = true;
+
+  function genId() { return 'DLK-' + Math.random().toString(36).slice(2, 8).toUpperCase(); }
+  function loadAccount() {
+    try { account = Object.assign(account, JSON.parse(localStorage.getItem(AKEY) || '{}')); } catch (e) { /* ignore */ }
+    if (!account.id) { account.id = genId(); saveAccount(); }
+    autosave = localStorage.getItem('delock.autosave') !== '0';
+  }
+  function saveAccount() { try { localStorage.setItem(AKEY, JSON.stringify(account)); } catch (e) { /* ignore */ } }
+  function creditPrice(n) { return n * CREDIT_RATE * (account.plan === 'premium' ? PREMIUM_OFF : 1); }
+
+  function renderMe() {
+    const info = PLAN_INFO[account.plan] || PLAN_INFO.basic;
+    $('meSubline').textContent = info.name + ' plan · ' + account.id;
+    $('meCredits').textContent = (account.credits || 0).toLocaleString();
+    const per10 = (10 * CREDIT_RATE * (account.plan === 'premium' ? PREMIUM_OFF : 1)).toFixed(2);
+    $('meRate').innerHTML = account.plan === 'premium'
+      ? `10 credits = <b style="color:#fff">$${per10}</b> · Premium 10% off`
+      : `10 credits = <b style="color:#fff">$${per10}</b>`;
+
+    $('mePlans').innerHTML = ['basic', 'premium'].map((id) => {
+      const p = PLAN_INFO[id];
+      const isCur = account.plan === id;
+      let btn;
+      if (isCur) btn = '<button class="me-plan-btn current" type="button" disabled>Current plan</button>';
+      else if (id === 'premium') btn = '<button class="me-plan-btn primary" type="button" data-plan="premium">Upgrade</button>';
+      else btn = '<button class="me-plan-btn" type="button" data-plan="basic">Switch</button>';
+      return `<div class="me-plan ${isCur ? 'active' : ''}">
+        <div class="me-plan-top"><b>${p.name}</b><span class="me-plan-fee">${p.fee}</span></div>
+        <div class="me-plan-sub">${p.monthly.toLocaleString()} credits / month</div>
+        ${btn}
+      </div>`;
+    }).join('');
+
+    $('mePacks').innerHTML = PACKS.map((n) => {
+      const price = creditPrice(n).toFixed(2);
+      const was = account.plan === 'premium' ? `<span class="me-pack-was">$${(n * CREDIT_RATE).toFixed(2)}</span>` : '';
+      return `<button class="me-pack" type="button" data-credits="${n}"><b>${n}</b><span>${was}$${price}</span></button>`;
+    }).join('');
+  }
+
+  function buyCredits(n) {
+    const price = creditPrice(n).toFixed(2);
+    if (!confirm('Buy ' + n + ' credits for $' + price + '?')) return;
+    account.credits = (account.credits || 0) + n;
+    saveAccount(); renderMe();
+    toast('Added ' + n + ' credits');
+  }
+  function openSupport() {
+    const subject = encodeURIComponent('Delock support request');
+    const body = encodeURIComponent(
+      'Account ID: ' + account.id + '\n' +
+      'Plan: ' + ((PLAN_INFO[account.plan] || {}).name || 'Basic') + '\n' +
+      'Credits: ' + (account.credits || 0) + '\n\n' +
+      'Please describe your issue below:\n');
+    window.location.href = 'mailto:support@delock.app?subject=' + subject + '&body=' + body;
+  }
+
   /* ----------------------------- Wiring ----------------------------- */
   function init() {
     renderLists();
     loadVault();
     updateVaultCount();
+    loadAccount();
+    renderMe();
 
     // mobile bottom tab bar
     gridEl = document.querySelector('.ws-grid');
@@ -645,6 +717,26 @@ Content-Type: application/json
 
     // mobile algorithm selector (collapsible)
     $('algosToggle').addEventListener('click', () => $('wsAlgos').classList.toggle('open'));
+
+    // me / account: entry points + controls
+    $('meBtn').addEventListener('click', () => setView('me'));
+    $('meClose').addEventListener('click', () => setView('encrypt'));
+    $('meLogout').addEventListener('click', () => { if (confirm('Log out of Delock?')) location.href = 'index.html'; });
+    $('meClearVault').addEventListener('click', () => { clearVault(); toast('Vault cleared'); });
+    $('meSupport').addEventListener('click', openSupport);
+    $('autosaveToggle').checked = autosave;
+    $('autosaveToggle').addEventListener('change', (e) => {
+      autosave = e.target.checked;
+      try { localStorage.setItem('delock.autosave', autosave ? '1' : '0'); } catch (err) { /* ignore */ }
+    });
+    $('mePlans').addEventListener('click', (e) => {
+      const b = e.target.closest('button[data-plan]');
+      if (b) location.href = 'pricing.html?plan=' + b.dataset.plan;
+    });
+    $('mePacks').addEventListener('click', (e) => {
+      const b = e.target.closest('button[data-credits]');
+      if (b) buyCredits(+b.dataset.credits);
+    });
 
     // vault: entry points (desktop button) + controls; the mobile Vault tab
     // is a data-view button handled by the tab handler above

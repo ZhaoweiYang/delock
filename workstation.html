@@ -40,6 +40,7 @@
         <svg viewBox="0 0 24 24" fill="none"><path d="M19 12H5M11 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         Back to site
       </a>
+      <button class="ws-me-btn" id="meBtn" type="button" aria-label="Me">D</button>
     </div>
   </header>
 
@@ -200,6 +201,105 @@
       </div>
       <div class="ws-vault-body" id="vaultList"></div>
     </section>
+
+    <!-- ----------------- ME / ACCOUNT (inline view) ----------------- -->
+    <section class="ws-me" id="mePanel">
+      <div class="ws-me-head">
+        <button class="ws-me-close" id="meClose" type="button" aria-label="Back to console">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M19 12H5M11 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <h2>Me</h2>
+      </div>
+      <div class="ws-me-body">
+        <div class="me-profile">
+          <span class="me-avatar">D</span>
+          <div class="me-id">
+            <b>you@example.com</b>
+            <span id="meSubline">Basic plan · DLK-000000</span>
+          </div>
+        </div>
+
+        <!-- Membership tiers -->
+        <div class="me-group">
+          <div class="me-group-title">Membership</div>
+          <div class="me-plans" id="mePlans"></div>
+        </div>
+
+        <!-- Credits -->
+        <div class="me-group">
+          <div class="me-group-title">Credits</div>
+          <div class="me-credits">
+            <div class="me-credits-bal">
+              <span>Balance</span>
+              <b id="meCredits">0</b>
+            </div>
+            <div class="me-credits-rate" id="meRate"></div>
+            <div class="me-credit-packs" id="mePacks"></div>
+          </div>
+        </div>
+
+        <!-- Support -->
+        <div class="me-group">
+          <div class="me-group-title">Support</div>
+          <button class="me-row" id="meSupport" type="button">
+            <span class="me-row-l">
+              <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="2.5" stroke="currentColor" stroke-width="1.7"/><path d="M4 7l8 6 8-6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Contact support
+            </span>
+            <svg class="me-chev" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+
+        <div class="me-group">
+          <div class="me-group-title">Settings</div>
+          <label class="me-row me-switch">
+            <span class="me-row-l">
+              <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="16" rx="2.5" stroke="currentColor" stroke-width="1.7"/><path d="M3 9h18" stroke="currentColor" stroke-width="1.7"/></svg>
+              Auto-save results to Vault
+            </span>
+            <input type="checkbox" id="autosaveToggle" checked />
+            <span class="me-knob"></span>
+          </label>
+          <button class="me-row" id="meClearVault" type="button">
+            <span class="me-row-l">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M4 7h16M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M6 7l1 13h10l1-13" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Clear vault
+            </span>
+            <svg class="me-chev" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+
+        <div class="me-group">
+          <div class="me-group-title">About &amp; legal</div>
+          <a class="me-row" href="#">
+            <span class="me-row-l"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2l8 3v6c0 5-3.4 9-8 11-4.6-2-8-6-8-11V5l8-3z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg> Privacy Policy</span>
+            <svg class="me-chev" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a class="me-row" href="#">
+            <span class="me-row-l"><svg viewBox="0 0 24 24" fill="none"><path d="M7 3h7l5 5v13H7z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M14 3v5h5" stroke="currentColor" stroke-width="1.7"/></svg> Terms of Service</span>
+            <svg class="me-chev" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a class="me-row" href="#">
+            <span class="me-row-l"><svg viewBox="0 0 24 24" fill="none"><path d="M8 11V8a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><rect x="5" y="11" width="14" height="9" rx="2" stroke="currentColor" stroke-width="1.7"/></svg> Security</span>
+            <svg class="me-chev" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a class="me-row" href="#">
+            <span class="me-row-l"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.7"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.7.3-1 .8-1 1.7M12 17h.01" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg> Help &amp; Support</span>
+            <svg class="me-chev" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <div class="me-row me-static">
+            <span class="me-row-l"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.7"/><path d="M12 11v5M12 8h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg> Version</span>
+            <span class="me-row-r">1.0.0</span>
+          </div>
+        </div>
+
+        <button class="me-logout" id="meLogout" type="button">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M15 12H4m0 0l4-4m-4 4l4 4M14 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Log out
+        </button>
+        <p class="me-foot">Delock runs entirely on your device. © 2026 Delock.</p>
+      </div>
+    </section>
   </div>
 
   <!-- ===================== MOBILE TAB BAR ===================== -->
@@ -220,6 +320,10 @@
     <button data-view="more" type="button">
       <svg viewBox="0 0 24 24" fill="none"><circle cx="5" cy="12" r="1.7" fill="currentColor"/><circle cx="12" cy="12" r="1.7" fill="currentColor"/><circle cx="19" cy="12" r="1.7" fill="currentColor"/></svg>
       <span>More</span>
+    </button>
+    <button data-view="me" type="button">
+      <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.8"/><path d="M4 21c0-4 3.6-6 8-6s8 2 8 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      <span>Me</span>
     </button>
   </nav>
 
